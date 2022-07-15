@@ -14,7 +14,7 @@ COPY ["src/SME.SERAp.Prova.Acompanhamento.Dominio/SME.SERAp.Prova.Acompanhamento
 COPY ["src/SME.SERAp.Prova.Acompanhamento.Infra/SME.SERAp.Prova.Acompanhamento.Infra.csproj", "SME.SERAp.Prova.Acompanhamento.Infra/"]
 COPY ["src/SME.SERAp.Prova.Acompanhamento.IoC/SME.SERAp.Prova.Acompanhamento.IoC.csproj", "SME.SERAp.Prova.Acompanhamento.IoC/"]
 
-RUN dotnet restore "src/SME.SERAp.Prova.Acompanhamento.Api/SME.SERAp.Prova.Acompanhamento.Api.csproj"
+RUN dotnet restore "SME.SERAp.Prova.Acompanhamento.Api/SME.SERAp.Prova.Acompanhamento.Api.csproj"
 COPY . .
 WORKDIR "/src/src/SME.SERAp.Prova.Acompanhamento.Api"
 RUN dotnet build "SME.SERAp.Prova.Acompanhamento.Api.csproj" -c Release -o /app/build
