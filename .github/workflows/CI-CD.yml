@@ -93,7 +93,7 @@ jobs:
     needs: [ build-dev ]
     if: ${{ github.ref == 'refs/heads/develop' }}
     environment:
-      name: production
+      name: development
     steps:
       - name: Redeploy
         uses: prefeiturasp/SME-GithubAction-Images/@kubectl-v2.0
@@ -109,7 +109,7 @@ jobs:
     needs: [ build-hom ]
     if: ${{ github.ref == 'refs/heads/release' }}
     environment:
-      name: production
+      name: release
     steps:
       - name: Redeploy
         uses: prefeiturasp/SME-GithubAction-Images/@kubectl-v2.0
