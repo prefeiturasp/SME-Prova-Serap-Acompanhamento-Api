@@ -29,13 +29,28 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
 
         private static void RegistrarRepositorios(IServiceCollection services)
         {
-            services.AddScoped<IRepositorioTeste, RepositorioTeste>();
+            services.AddScoped<IRepositorioAutenticacao, RepositorioAutenticacao>();
+            services.AddScoped<IRepositorioAbrangencia, RepositorioAbrangencia>();
+            services.AddScoped<IRepositorioDre, RepositorioDre>();
+            services.AddScoped<IRepositorioUe, RepositorioUe>();
+            services.AddScoped<IRepositorioProva, RepositorioProva>();
+            services.AddScoped<IRepositorioAno, RepositorioAno>();
+            services.AddScoped<IRepositorioTurma, RepositorioTurma>();
         }
 
         private static void RegistrarCasosDeUso(IServiceCollection services)
         {
-            services.AddScoped<IObterTodosTesteUseCase, ObterTodosTesteUseCase>();
-            services.AddScoped<IInserirTesteUseCase, InserirTesteUseCase>();
+            services.AddScoped<IAutenticacaoUseCase, AutenticacaoUseCase>();
+            services.AddScoped<IAutenticacaoValidarUseCase, AutenticacaoValidarUseCase>();
+            services.AddScoped<IAutenticacaoRevalidarUseCase, AutenticacaoRevalidarUseCase>();
+            services.AddScoped<IObterAnoLetivoUseCase, ObterAnoLetivoUseCase>();
+            services.AddScoped<IObterSituacaoProvaUseCase, ObterSituacaoProvaUseCase>();
+            services.AddScoped<IObterProvaUseCase, ObterProvaUseCase>();
+            services.AddScoped<IObterModalidadeUseCase, ObterModalidadeUseCase>();
+            services.AddScoped<IObterDreUsuarioLogadoUseCase, ObterDreUsuarioLogadoUseCase>();
+            services.AddScoped<IObterUeUsuarioLogadoUseCase, ObterUeUsuarioLogadoUseCase>();
+            services.AddScoped<IObterAnosUseCase, ObterAnosUseCase>();
+            services.AddScoped<IObterTurmasUseCase, ObterTurmasUseCase>();
         }
     }
 }

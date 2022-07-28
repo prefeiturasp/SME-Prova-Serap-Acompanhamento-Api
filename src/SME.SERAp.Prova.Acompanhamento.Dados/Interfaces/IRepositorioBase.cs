@@ -8,9 +8,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
     {
         Task<bool> AlterarAsync(TEntidade entidade);
         Task<bool> CriarIndexAsync();
-        Task<bool> DeletarAsync(string id);
+        Task<bool> DeletarAsync(long id);
         Task<bool> InserirAsync(TEntidade entidade);
-        Task<TEntidade> ObterPorIdAsync(string id);
+        Task<TEntidade> ObterPorIdAsync(long id);
         Task<IEnumerable<TEntidade>> ObterTodosAsync();
     }
 }
