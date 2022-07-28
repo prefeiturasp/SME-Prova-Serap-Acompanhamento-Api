@@ -117,13 +117,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
 
             app.UseAuthorization();
 
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                await next();
-            });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
