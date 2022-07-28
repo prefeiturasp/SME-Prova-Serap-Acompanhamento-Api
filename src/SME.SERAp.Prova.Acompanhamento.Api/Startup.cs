@@ -28,12 +28,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpContextAccessor();
 
             ConfigEnvoiromentVariables(services);
 
-            RegistraDocumentacaoSwagger.Registrar(services);
             RegistraDependencias.Registrar(services);
-
+            RegistraAutenticacao.Registrar(services, Configuration);
+            RegistraDocumentacaoSwagger.Registrar(services);
             RegistraMvc.Registrar(services);
         }
 
@@ -102,7 +103,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();    
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
