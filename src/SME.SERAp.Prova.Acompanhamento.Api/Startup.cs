@@ -106,7 +106,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
               .AllowAnyOrigin()
