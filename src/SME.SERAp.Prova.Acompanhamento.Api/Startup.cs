@@ -106,7 +106,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseCors(builder => builder
               .AllowAnyOrigin()
@@ -116,6 +116,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                await next();
+            });
 
             app.UseEndpoints(endpoints =>
             {
