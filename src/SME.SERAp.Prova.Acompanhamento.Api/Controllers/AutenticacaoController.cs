@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SME.SERAp.Prova.Acompanhamento.Api.Attributes;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Threading.Tasks;
@@ -7,10 +8,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/autenticacao")]
+    [ChaveAutenticacaoApi]
     public class AutenticacaoController : ControllerBase
     {
         [HttpPost]
-        //[ChaveAutenticacaoApi]
+        
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
@@ -22,7 +24,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
         }
 
         [HttpPost("validar")]
-        //[ChaveAutenticacaoApi]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
@@ -34,7 +35,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
         }
 
         [HttpPost("revalidar")]
-        //[ChaveAutenticacaoApi]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
