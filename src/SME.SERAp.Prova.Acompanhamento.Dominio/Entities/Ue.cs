@@ -4,7 +4,7 @@
     {
         public Ue(long id, long dreId, long codigo, string nome)
         {
-            Id = id;
+            Id = id.ToString();
             DreId = dreId;
             Codigo = codigo;
             Nome = nome;
