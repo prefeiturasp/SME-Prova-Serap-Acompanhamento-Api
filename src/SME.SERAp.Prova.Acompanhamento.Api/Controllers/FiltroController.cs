@@ -61,15 +61,15 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
             return Ok(await obterUeUsuarioLogadoUseCase.Executar(dreId));
         }
 
-        [HttpGet("ano/{anoLetivo}/ue/{ueId}")]
+        [HttpGet("ano/{anoLetivo}/modalidade/{modalidade}/ue/{ueId}")]
         [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterAnos(int anoLetivo, long ueId, [FromServices] IObterAnosUseCase obterAnoUseCase)
+        public async Task<IActionResult> ObterAnos(int anoLetivo, Modalidade modalidade, long ueId, [FromServices] IObterAnosUseCase obterAnoUseCase)
         {
-            return Ok(await obterAnoUseCase.Executar(anoLetivo, ueId));
+            return Ok(await obterAnoUseCase.Executar(anoLetivo, modalidade, ueId));
         }
 
-        [HttpGet("turma/{anoLetivo}/ue/{ueId}/modalidade/{modalidade}/ano/{ano}")]
+        [HttpGet("turma/{anoLetivo}/modalidade/{modalidade}/ue/{ueId}/ano/{ano}")]
         [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
         public async Task<IActionResult> ObterTurmas(int anoLetivo, long ueId, Modalidade modalidade, string ano, [FromServices] IObterTurmasUseCase obterTurmasUseCase)
