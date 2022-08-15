@@ -54,6 +54,8 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
             services.AddScoped<IObterAnosUseCase, ObterAnosUseCase>();
             services.AddScoped<IObterTurmasUseCase, ObterTurmasUseCase>();
             services.AddScoped<IObterAlunosProvaTurmaUseCase, ObterAlunosProvaTurmaUseCase>();
+            services.AddScoped<IObterTotaisProvasUseCase, ObterTotaisProvasUseCase>();
+
         }
     }
 }
