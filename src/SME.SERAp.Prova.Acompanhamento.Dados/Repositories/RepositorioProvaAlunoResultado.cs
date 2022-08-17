@@ -121,8 +121,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
         {
             QueryContainer query = MontarQueryFiltro(filtro);
 
-            var dataInicio = DateTime.Parse(DateTime.Now.ToString("dd/MM/yyyy 00:00:01"));
-            var dataFim = DateTime.Parse(DateTime.Now.ToString("dd/MM/yyyy 23:59:59"));
+            var dataInicio = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:01"));
+            var dataFim = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 23:59:59"));
 
             query = query
                 && new QueryContainerDescriptor<ProvaAlunoResultado>().DateRange(d => d.Field(f => f.AlunoInicio).GreaterThanOrEquals(dataInicio))
@@ -144,7 +144,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
         {
             QueryContainer query = MontarQueryFiltro(filtro);
 
-            var dataInicio = DateTime.Parse(DateTime.Now.ToString("dd/MM/yyyy 00:00:00"));
+            var dataInicio = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 00:00:00"));
 
             query = query && new QueryContainerDescriptor<ProvaAlunoResultado>().DateRange(d => d.Field(f => f.AlunoInicio).LessThan(dataInicio));
             query = query && !new QueryContainerDescriptor<ProvaAlunoResultado>().Exists(d => d.Field(d => d.AlunoFim));
