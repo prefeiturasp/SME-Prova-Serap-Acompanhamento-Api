@@ -11,7 +11,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/totalizadores")]
-    [Authorize("Bearer")]
+   // [Authorize("Bearer")]
     public class TotalizadoresController : Controller
     {
         [HttpGet("")]

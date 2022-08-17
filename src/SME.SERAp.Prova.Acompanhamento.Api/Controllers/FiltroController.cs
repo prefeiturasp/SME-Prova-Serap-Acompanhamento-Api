@@ -10,7 +10,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/filtro")]
-    [Authorize("Bearer")]
+  //  [Authorize("Bearer")]
     public class FiltroController : ControllerBase
     {
         [HttpGet("ano-letivo")]
