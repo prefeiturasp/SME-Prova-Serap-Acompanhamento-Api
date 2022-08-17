@@ -35,7 +35,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             listaTotais.Add(new TotalDto("Provas Finalizadas", "#198459", totalFinalizadas.ToString()));
 
             var percentualRealizado = (totalFinalizadas * 100) / totalProvas;
-            listaTotais.Add(new TotalDto("Percentual Realizado", "#1B80D4", $"{percentualRealizado}%"));
+            listaTotais.Add(new TotalDto("Percentual Realizado", "#1B80D4", $"{percentualRealizado:N2}%"));
 
             return listaTotais;
         }

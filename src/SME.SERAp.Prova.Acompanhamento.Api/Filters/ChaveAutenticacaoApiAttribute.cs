@@ -13,12 +13,14 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Attributes
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+#if !DEBUG
             string chaveApi = Environment.GetEnvironmentVariable(ChaveEnvironmentVariableName);
             if (!context.HttpContext.Request.Headers.TryGetValue(ChaveHeader, out var chaveRecebida) || !chaveRecebida.Equals(chaveApi))
             {
                 context.Result = new UnauthorizedResult();
                 return;
             }
+#endif
             await next();
         }
     }
