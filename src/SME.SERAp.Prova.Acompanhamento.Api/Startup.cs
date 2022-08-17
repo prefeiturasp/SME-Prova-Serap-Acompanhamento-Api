@@ -69,6 +69,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             var connectionPool = new StaticConnectionPool(nodes);
             var connectionSettings = new ConnectionSettings(connectionPool);
             connectionSettings.DefaultIndex(elasticOptions.DefaultIndex);
+
+            if (!string.IsNullOrEmpty(elasticOptions.CertificateFingerprint))
+                connectionSettings.CertificateFingerprint(elasticOptions.CertificateFingerprint);
+
+            if (!string.IsNullOrEmpty(elasticOptions.Username) && !string.IsNullOrEmpty(elasticOptions.Password))
+                connectionSettings.BasicAuthentication(elasticOptions.Username, elasticOptions.Password);
+
             var elasticClient = new ElasticClient(connectionSettings);
             services.AddSingleton<IElasticClient>(elasticClient);
 
