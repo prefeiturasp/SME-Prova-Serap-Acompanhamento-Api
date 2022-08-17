@@ -13,7 +13,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra.Dtos
         public int? AnoEscolar { get; set; }
         public long? TurmaId { get; set; }
         public int[] ProvasId { get; set; }
-        public ProvaSituacao? ProvaSituacao { get; set; }
 
+        [Required]
+        public ProvaSituacao ProvaSituacao { get; set; }
+        
+        public int NumeroPagina { get; set; }
+        public int NumeroRegistros { get; set; }
     }
 }
