@@ -44,5 +44,41 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             return response.Hits.Select(hit => hit.Source).ToList();
         }
+
+        public async Task<IEnumerable<Dominio.Entities.Prova>> ObterProvaPorAnoEModalidadeAsync(Dominio.Enums.Modalidade modalidade, int anoLetivo)
+        {
+
+            QueryContainer query = new QueryContainerDescriptor<Dominio.Entities.Prova>().Term(p => p.Field(p => p.Ano).Value(anoLetivo));
+
+            if (Modalidade.NaoCadastrado != 0)
+                query = query && new QueryContainerDescriptor<Dominio.Entities.Prova>().Term(p => p.Field(p => p.Modalidade).Value(modalidade));
+
+            var search = new SearchDescriptor<Dominio.Entities.Prova>(IndexName)
+             .Query(_ => query)
+             .From(0)
+             .Size(10000);
+
+            var response = await elasticClient.SearchAsync<Dominio.Entities.Prova>(search);
+
+            if (!response.IsValid) return default;
+
+            return response.Hits.Select(hit => hit.Source).ToList();
+        }
+
+
+        public async Task<IEnumerable<Dominio.Entities.Prova>> ObterProvaPorAnoAsync(int anoLetivo)
+        {
+            QueryContainer query = new QueryContainerDescriptor<Dominio.Entities.Prova>().Term(p => p.Field(p => p.Ano).Value(anoLetivo));
+
+            var search = new SearchDescriptor<Dominio.Entities.Prova>(IndexName)
+             .Query(_ => query)
+             .From(0)
+             .Size(10000);
+
+            var response = await elasticClient.SearchAsync<Dominio.Entities.Prova>(search);
+
+            if (!response.IsValid) return default;
+            return response.Hits.Select(hit => hit.Source).ToList();
+        }
     }
 }

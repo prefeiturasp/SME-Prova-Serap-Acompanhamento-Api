@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases;
+using SME.SERAp.Prova.Acompanhamento.Dados;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dados.Repositories;
 using SME.SERAp.Prova.Acompanhamento.Infra.Interfaces;
@@ -36,6 +37,7 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
             services.AddScoped<IRepositorioProva, RepositorioProva>();
             services.AddScoped<IRepositorioAno, RepositorioAno>();
             services.AddScoped<IRepositorioTurma, RepositorioTurma>();
+            services.AddScoped<IRepositorioProvaAlunoResultado, RepositorioProvaAlunoResultado>();
         }
 
         private static void RegistrarCasosDeUso(IServiceCollection services)
@@ -51,6 +53,9 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
             services.AddScoped<IObterUeUsuarioLogadoUseCase, ObterUeUsuarioLogadoUseCase>();
             services.AddScoped<IObterAnosUseCase, ObterAnosUseCase>();
             services.AddScoped<IObterTurmasUseCase, ObterTurmasUseCase>();
+            services.AddScoped<IObterAlunosProvaTurmaUseCase, ObterAlunosProvaTurmaUseCase>();
+            services.AddScoped<IObterTotaisProvasUseCase, ObterTotaisProvasUseCase>();
+
         }
     }
 }

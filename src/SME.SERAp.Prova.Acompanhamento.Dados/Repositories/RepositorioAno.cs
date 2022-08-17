@@ -1,6 +1,7 @@
 ﻿using Nest;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
+using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +15,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
         {
         }
 
-        public async Task<IEnumerable<Ano>> ObterPorAnoLetivoUeIdAsync(int anoLetivo, long ueId)
+        public async Task<IEnumerable<Ano>> ObterPorAnoLetivoModalidadeUeIdAsync(int anoLetivo, Modalidade modalidade, long ueId)
         {
             var search = new SearchDescriptor<Ano>(IndexName).Query(q =>
                 q.Term(t => t.Field(f => f.AnoLetivo).Value(anoLetivo)) &&
+                q.Term(t => t.Field(f => f.Modalidade).Value(modalidade)) &&
                 q.Term(t => t.Field(f => f.UeId).Value(ueId))
             ).From(0).Size(10000);
             var response = await elasticClient.SearchAsync<Ano>(search);

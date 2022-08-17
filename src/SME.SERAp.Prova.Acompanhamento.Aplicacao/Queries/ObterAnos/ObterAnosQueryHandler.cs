@@ -19,7 +19,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
         public async Task<IEnumerable<Ano>> Handle(ObterAnosQuery request, CancellationToken cancellationToken)
         {
-            return await repositorioAno.ObterPorAnoLetivoUeIdAsync(request.AnoLetivo, request.UeId);
+            return await repositorioAno.ObterPorAnoLetivoModalidadeUeIdAsync(request.AnoLetivo, request.Modalidade, request.UeId);
         }
     }
 }
