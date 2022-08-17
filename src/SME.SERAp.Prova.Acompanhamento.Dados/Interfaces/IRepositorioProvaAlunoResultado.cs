@@ -10,5 +10,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
     {
         Task<IEnumerable<ProvaAlunoResultado>> ObterPorProvaTurmaAsync(long provaId, long turmaId);
         Task<IEnumerable<ProvaAlunoResultado>> ObterProvaAlunoResultadoPorFiltroAsync(FiltroDto filtro);
+        Task<double> ObterTotalProvasFinalizadasPorFiltroAsync(FiltroDto filtro);
+        Task<double> ObterTotalProvasIniciadasHojePorFiltroAsync(FiltroDto filtro);
+        Task<double> ObterTotalProvasNaoFinalizadasPorFiltroAsync(FiltroDto filtro);
+        Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro);
     }
 }

@@ -9,7 +9,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 {
     public class ObterAlunosProvaTurmaUseCase : AbstractUseCase, IObterAlunosProvaTurmaUseCase
     {
-        public ObterAlunosProvaTurmaUseCase(IMediator mediator) : base(mediator){}
+        public ObterAlunosProvaTurmaUseCase(IMediator mediator) : base(mediator) { }
 
         public async Task<IEnumerable<AlunoTurmaDto>> Executar(long provaId, long turmaId)
         {

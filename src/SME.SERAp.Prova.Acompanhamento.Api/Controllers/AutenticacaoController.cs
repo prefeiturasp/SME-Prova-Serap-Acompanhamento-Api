@@ -8,11 +8,10 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/autenticacao")]
-    [ChaveAutenticacaoApi]
     public class AutenticacaoController : ControllerBase
     {
         [HttpPost]
-        
+        [ChaveAutenticacaoApi]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]

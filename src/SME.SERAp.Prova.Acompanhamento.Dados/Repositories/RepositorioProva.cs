@@ -1,7 +1,6 @@
 ﻿using Nest;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
-using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,11 +58,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
              .From(0)
              .Size(10000);
 
-                var response = await elasticClient.SearchAsync<Dominio.Entities.Prova>(search);
+            var response = await elasticClient.SearchAsync<Dominio.Entities.Prova>(search);
 
-                if (!response.IsValid) return default;
+            if (!response.IsValid) return default;
 
-                return response.Hits.Select(hit => hit.Source).ToList();
+            return response.Hits.Select(hit => hit.Source).ToList();
         }
 
 
