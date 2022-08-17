@@ -45,10 +45,10 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
                 query = query && new QueryContainerDescriptor<ProvaAlunoResultado>().Term(p => p.Field(p => p.TurmaId).Value(filtro.TurmaId));
             if (filtro.AnoEscolar != null && filtro.AnoEscolar > 0)
                 query = query && new QueryContainerDescriptor<ProvaAlunoResultado>().Term(p => p.Field(p => p.Ano).Value(filtro.AnoEscolar.ToString()));
-      
+     
             //Todo Fazer where in no elastic 
-           //  if(filtro.ProvasId != null && filtro.ProvasId.Any())
-             //   query = query && new QueryContainerDescriptor<ProvaAlunoResultado>().Bool(b=> b.Must(a=> a.Term(p => p.Field(p=> p.ProvaId).Value(filtro.ProvasId))));
+            if(filtro.ProvasId != null && filtro.ProvasId.Any())
+               query = query && new QueryContainerDescriptor<ProvaAlunoResultado>().Bool(b=> b.Must(a=> a.Term(p => p.Field(p=> p.ProvaId).Value(filtro.ProvasId))));
             var search = new SearchDescriptor<ProvaAlunoResultado>(IndexName)
            .Query(_ => query)
            .From(0)
