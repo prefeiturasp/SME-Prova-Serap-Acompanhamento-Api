@@ -71,7 +71,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             resumoProva.ProvasNaoFinalizadas = resultadoProva.Sum(p => p.TotalNaoFinalizados);
             resumoProva.ProvasFinalizadas = resultadoProva.Sum(p => p.TotalFinalizados);
             resumoProva.TempoMedio = ObterTempoMedio(resultadoProva);
-            resumoProva.PencentualRealizado = ObterPencentualRealizadoResumoProva(resumoProva.ProvasFinalizadas, resumoProva.TotalAlunos);
+            resumoProva.PercentualRealizado = ObterPencentualRealizadoResumoProva(resumoProva.ProvasFinalizadas, resumoProva.TotalAlunos);
             resumoProva.DetalheProva = ObterDetalheProva(resultadoProva);
             return resumoProva;
         }
