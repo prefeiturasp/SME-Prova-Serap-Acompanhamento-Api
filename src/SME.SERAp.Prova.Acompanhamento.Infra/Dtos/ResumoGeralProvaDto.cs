@@ -15,7 +15,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public long ProvasNaoFinalizadas { get; set; }
         public long ProvasFinalizadas { get; set; }
         public int TempoMedio { get; set; }
-        public decimal PencentualRealizado { get; set; }
+        public decimal PercentualRealizado { get; set; }
         public DetalheProvaDto DetalheProva { get; set; }
 
     }
