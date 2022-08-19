@@ -5,7 +5,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
     {
         public ResumoGeralProvaDto()
         {
-            
+
         }
 
         public long ProvaId { get; set; }

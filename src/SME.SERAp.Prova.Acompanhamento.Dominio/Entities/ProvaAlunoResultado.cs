@@ -6,7 +6,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio
 {
     public class ProvaAlunoResultado : EntidadeBase
     {
-        public ProvaAlunoResultado(long provaId, long dreId, long ueId, long turmaId, string ano, Modalidade modalidade, int anoLetivo, DateTime inicio, DateTime fim, long alunoId, long alunoRa, string alunoNome, string alunoNomeSocial, bool alunoDownload, DateTime? alunoInicio, DateTime? alunoFim, int? alunoTempoMedio, int? alunoQuestaoRespondida)
+        public ProvaAlunoResultado(long provaId, long dreId, long ueId, long turmaId, string ano, Modalidade modalidade, int anoLetivo, DateTime inicio, DateTime fim, long alunoId, long alunoRa, string alunoNome, string alunoNomeSocial, int situacao, bool alunoDownload, DateTime? alunoInicio, DateTime? alunoFim, int? alunoTempoMedio, int? alunoQuestaoRespondida)
         {
             ProvaId = provaId;
             DreId = dreId;
@@ -21,6 +21,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio
             AlunoRa = alunoRa;
             AlunoNome = alunoNome;
             AlunoNomeSocial = alunoNomeSocial;
+            AlunoSituacao = situacao;
             AlunoDownload = alunoDownload;
             AlunoInicio = alunoInicio;
             AlunoFim = alunoFim;
@@ -43,6 +44,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio
         public long AlunoRa { get; set; }
         public string AlunoNome { get; set; }
         public string AlunoNomeSocial { get; set; }
+        public int AlunoSituacao { get; set; }
         public bool AlunoDownload { get; set; }
         public DateTime? AlunoInicio { get; set; }
         public DateTime? AlunoFim { get; set; }

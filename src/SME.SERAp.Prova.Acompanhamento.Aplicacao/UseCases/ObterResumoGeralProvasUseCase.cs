@@ -10,7 +10,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
     public class ObterResumoGeralProvasUseCase : AbstractUseCase, IObterResumoGeralProvasUseCase
     {
-        public ObterResumoGeralProvasUseCase(IMediator mediator) : base(mediator){}
+        public ObterResumoGeralProvasUseCase(IMediator mediator) : base(mediator) { }
 
         public async Task<ResumoGeralDto> Executar(FiltroDto filtro)
         {

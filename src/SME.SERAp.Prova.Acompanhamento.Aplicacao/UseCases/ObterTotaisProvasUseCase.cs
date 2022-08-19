@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
-using SME.SERAp.Prova.Acompanhamento.Dados;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System;
