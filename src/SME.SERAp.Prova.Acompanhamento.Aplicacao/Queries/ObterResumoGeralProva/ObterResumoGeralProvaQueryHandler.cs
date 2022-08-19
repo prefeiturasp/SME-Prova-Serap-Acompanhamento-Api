@@ -71,7 +71,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             resumoProva.ProvasNaoFinalizadas = resultadoProva.Sum(p => p.TotalNaoFinalizados);
             resumoProva.ProvasFinalizadas = resultadoProva.Sum(p => p.TotalFinalizados);
             resumoProva.TempoMedio = ObterTempoMedio(resultadoProva);
-            resumoProva.PencentualRealizado = ObterPencentualRealizadoResumoProva(resumoProva.ProvasFinalizadas, resumoProva.TotalAlunos);
+            resumoProva.PercentualRealizado = ObterPercentualRealizadoResumoProva(resumoProva.ProvasFinalizadas, resumoProva.TotalAlunos);
             resumoProva.DetalheProva = ObterDetalheProva(resultadoProva);
             return resumoProva;
         }
@@ -97,7 +97,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             return detalhe;
         }
 
-        private decimal ObterPencentualRealizadoResumoProva(long provasFinalizadas, long totalAlunos)
+        private decimal ObterPercentualRealizadoResumoProva(long provasFinalizadas, long totalAlunos)
         {
             var percentual = (provasFinalizadas * 100) / totalAlunos;
             return percentual > 100 ? 100 : Math.Round(Convert.ToDecimal(percentual), 2);
