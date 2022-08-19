@@ -28,12 +28,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpContextAccessor();
 
             ConfigEnvoiromentVariables(services);
 
-            RegistraDocumentacaoSwagger.Registrar(services);
             RegistraDependencias.Registrar(services);
-
+            RegistraAutenticacao.Registrar(services, Configuration);
+            RegistraDocumentacaoSwagger.Registrar(services);
             RegistraMvc.Registrar(services);
         }
 
@@ -68,6 +69,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             var connectionPool = new StaticConnectionPool(nodes);
             var connectionSettings = new ConnectionSettings(connectionPool);
             connectionSettings.DefaultIndex(elasticOptions.DefaultIndex);
+
+            if (!string.IsNullOrEmpty(elasticOptions.CertificateFingerprint))
+                connectionSettings.CertificateFingerprint(elasticOptions.CertificateFingerprint);
+
+            if (!string.IsNullOrEmpty(elasticOptions.Username) && !string.IsNullOrEmpty(elasticOptions.Password))
+                connectionSettings.BasicAuthentication(elasticOptions.Username, elasticOptions.Password);
+
             var elasticClient = new ElasticClient(connectionSettings);
             services.AddSingleton<IElasticClient>(elasticClient);
 
@@ -102,7 +110,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();    
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
