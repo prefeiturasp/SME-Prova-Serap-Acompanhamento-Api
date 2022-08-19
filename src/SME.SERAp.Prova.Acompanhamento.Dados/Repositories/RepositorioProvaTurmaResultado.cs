@@ -79,10 +79,14 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             if (filtro.AnoEscolar != null && filtro.AnoEscolar > 0)
                 query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.Ano).Value(filtro.AnoEscolar.ToString()));
 
+            QueryContainer queryProva = new QueryContainerDescriptor<ProvaTurmaResultado>();
+
             if (filtro.ProvasId != null && filtro.ProvasId.Any())
             {
                 foreach (var provaId in filtro.ProvasId)
-                    query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
+                    queryProva = queryProva || new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
+
+                query = query && (queryProva);
             }
 
             return query;
