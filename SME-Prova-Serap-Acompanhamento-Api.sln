@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SME.SERAp.Prova.Acompanhame
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SME.SERAp.Prova.Acompanhamento.IoC", "src\SME.SERAp.Prova.Acompanhamento.IoC\SME.SERAp.Prova.Acompanhamento.IoC.csproj", "{C2CEF98F-6730-4108-A938-3DE01A4C2687}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SME.SERAp.Prova.Acompanhamento.Api", "src\SME.SERAp.Prova.Acompanhamento.Api\SME.SERAp.Prova.Acompanhamento.Api.csproj", "{DD71747F-055E-4506-9E08-DFD96273A6C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SME.SERAp.Prova.Acompanhamento.Api", "src\SME.SERAp.Prova.Acompanhamento.Api\SME.SERAp.Prova.Acompanhamento.Api.csproj", "{DD71747F-055E-4506-9E08-DFD96273A6C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
