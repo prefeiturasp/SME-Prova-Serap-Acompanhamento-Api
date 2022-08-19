@@ -16,7 +16,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             var result = await mediator.Send(new ObterAlunosProvaTurmaQuery(provaId, turmaId));
             if (result == null || !result.Any()) return default;
 
-            return result;
+            return result.OrderBy(t => t.NomeEstudante);
         }
     }
 }
