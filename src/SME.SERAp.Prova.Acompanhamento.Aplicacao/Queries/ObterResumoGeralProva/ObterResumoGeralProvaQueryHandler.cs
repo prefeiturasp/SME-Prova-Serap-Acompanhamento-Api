@@ -45,7 +45,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
             foreach (var prova in provas)
             {
-                var resultadoProva = await ObterResumoFiltro(long.Parse(prova.Id), dreId, ueId, anoEscolar, turmaId);
+                var resultadoProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(long.Parse(prova.Id), dreId, ueId, anoEscolar, turmaId);
                 if (resultadoProva != null && resultadoProva.Any())
                 {
                     resumoGeralProvas.Add(ObterResumoProva(resultadoProva));
@@ -53,11 +53,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             }
 
             return resumoGeralProvas.AsEnumerable();
-        }
-
-        private async Task<IEnumerable<ProvaTurmaResultado>> ObterResumoFiltro(long provaId, int? dreId, int? ueId, string anoEscolar, long? turmaId)
-        {
-            return await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(provaId, dreId, ueId, anoEscolar, turmaId);
         }
 
         private ResumoGeralProvaDto ObterResumoProva(IEnumerable<ProvaTurmaResultado> resultadoProva)
