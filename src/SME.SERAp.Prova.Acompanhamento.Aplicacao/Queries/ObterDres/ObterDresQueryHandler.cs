@@ -23,7 +23,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             if (request.Ids != null && request.Ids.Any())
                 return await repositorioDre.obterPorIdsAsync(request.Ids);
             else
-                return await repositorioDre.ObterTodosAsync();
+                return await repositorioDre.ObterTodasAsync();
         }
     }
 }
