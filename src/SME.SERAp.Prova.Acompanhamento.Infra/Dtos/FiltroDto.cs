@@ -16,7 +16,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra.Dtos
 
         [Required]
         public ProvaSituacao ProvaSituacao { get; set; }
-        
+
         public int NumeroPagina { get; set; }
         public int NumeroRegistros { get; set; }
     }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Attributes
             string chaveApi = Environment.GetEnvironmentVariable(ChaveEnvironmentVariableName);
             if (!context.HttpContext.Request.Headers.TryGetValue(ChaveHeader, out var chaveRecebida) || !chaveRecebida.Equals(chaveApi))
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new Microsoft.AspNetCore.Mvc.UnauthorizedResult();
                 return;
             }
 #endif
