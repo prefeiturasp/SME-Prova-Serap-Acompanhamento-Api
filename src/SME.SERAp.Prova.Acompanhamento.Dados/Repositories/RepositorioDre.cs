@@ -1,6 +1,7 @@
 ﻿using Nest;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +28,19 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var response = await elasticClient.SearchAsync<Dre>(search);
 
             if (!response.IsValid) return default;
+
+            return response.Hits.Select(hit => hit.Source).ToList();
+        }
+
+        public async Task<IEnumerable<Dre>> ObterTodasAsync()
+        {
+            var search = new SearchDescriptor<Dre>(IndexName)
+                .From(0).Size(100);
+
+            var response = await elasticClient.SearchAsync<Dre>(search);
+
+            if (!response.IsValid)
+                throw new Exception(response.ServerError?.ToString(), response.OriginalException);
 
             return response.Hits.Select(hit => hit.Source).ToList();
         }

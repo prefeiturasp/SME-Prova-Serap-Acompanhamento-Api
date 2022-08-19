@@ -7,5 +7,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
     public interface IRepositorioDre : IRepositorioBase<Dre>
     {
         Task<IEnumerable<Dre>> obterPorIdsAsync(long[] ids);
+        Task<IEnumerable<Dre>> ObterTodasAsync();
     }
 }
