@@ -31,16 +31,23 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             if (turmaId != null)
                 query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.TurmaId).Value(turmaId));
 
+            var resultado = new List<ProvaTurmaResultado>();
+
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(_ => query)
-                .From(0)
+                .Scroll("1m")
                 .Size(10000);
 
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
-
             if (!response.IsValid) return default;
 
-            return response.Hits.Select(hit => hit.Source).AsEnumerable();
+            while (response.Hits.Any())
+            {
+                resultado.AddRange(response.Hits.Select(hit => hit.Source).AsEnumerable());
+                response = await elasticClient.ScrollAsync<ProvaTurmaResultado>("1m", response.ScrollId);
+            }
+
+            return resultado;
         }
 
         private static QueryContainer MontarQueryFiltro(FiltroDto filtro)
