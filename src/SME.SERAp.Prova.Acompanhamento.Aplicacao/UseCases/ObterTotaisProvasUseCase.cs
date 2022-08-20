@@ -20,20 +20,22 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
         public async Task<List<TotalDto>> Executar(FiltroDto filtro)
         {
-            var listaTotais = new List<TotalDto>();
+            var dresId = await mediator.Send(new ObterDresUsuarioLogadoQuery());
+            var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
 
-            var totalProvas = await repositorioProvaTurmaResultado.ObterTotalProvasPorFiltroAsync(filtro);
+            var listaTotais = new List<TotalDto>();
+            var totalProvas = await repositorioProvaTurmaResultado.ObterTotalProvasPorFiltroAsync(filtro, dresId, uesId);
             listaTotais.Add(new TotalDto("Total de Provas", "#1B80D4", totalProvas.ToString()));
 
-            var totalIniciadas = await repositorioProvaTurmaResultado.ObterTotalProvasIniciadasHojePorFiltroAsync(filtro);
+            var totalIniciadas = await repositorioProvaTurmaResultado.ObterTotalProvasIniciadasHojePorFiltroAsync(filtro, dresId, uesId);
             listaTotais.Add(new TotalDto("Provas Iniciadas hoje", "#198459", totalIniciadas.ToString()));
 
-            var totalNaoFinalizadas = await repositorioProvaTurmaResultado.ObterTotalProvasNaoFinalizadasPorFiltroAsync(filtro);
+            var totalNaoFinalizadas = await repositorioProvaTurmaResultado.ObterTotalProvasNaoFinalizadasPorFiltroAsync(filtro, dresId, uesId);
             var provasNaoFinalizadas = new TotalDto("Provas Não Finalizadas", "#B40C02", totalNaoFinalizadas.ToString());
             provasNaoFinalizadas.Tooltip = "Provas iniciadas em dias anteriores e não finalizadas.";
             listaTotais.Add(provasNaoFinalizadas);
 
-            var totalFinalizadas = await repositorioProvaTurmaResultado.ObterTotalProvasFinalizadasPorFiltroAsync(filtro);
+            var totalFinalizadas = await repositorioProvaTurmaResultado.ObterTotalProvasFinalizadasPorFiltroAsync(filtro, dresId, uesId);
             listaTotais.Add(new TotalDto("Provas Finalizadas", "#198459", totalFinalizadas.ToString()));
 
             var percentualRealizado = totalFinalizadas > 0 ? (totalFinalizadas * 100) / totalProvas : 0;

@@ -24,28 +24,17 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
         public async Task<IEnumerable<ResumoGeralProvaDto>> Handle(ObterResumoGeralProvaQuery request, CancellationToken cancellationToken)
         {
-            var anoLetivo = request.Filtro.AnoLetivo;
-            var situacao = request.Filtro.ProvaSituacao;
-            var provaIds = request.Filtro.ProvasId;
-            var modalidade = request.Filtro.Modalidade;
-            var dreId = request.Filtro.DreId;
-            var ueId = request.Filtro.UeId != null ? Convert.ToInt32(request.Filtro.UeId) : (int?)null;
-            var anoEscolar = request.Filtro.AnoEscolar != null ? Convert.ToString(request.Filtro.AnoEscolar) : string.Empty;
-            var turmaId = request.Filtro.TurmaId;
-
             var resumoGeralProvas = new List<ResumoGeralProvaDto>();
 
-            var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(anoLetivo, situacao);
+            var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(request.Filtro.AnoLetivo, request.Filtro.ProvaSituacao);
 
+            var provaIds = request.Filtro.ProvasId;
             if (provaIds != null && provaIds.Any())
                 provas = provas.Where(p => provaIds.Any(x => x.ToString() == p.Id));
 
-            if (modalidade != null)
-                provas = provas.Where(p => p.Modalidade == modalidade);
-
             foreach (var prova in provas)
             {
-                var resultadoProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(long.Parse(prova.Id), dreId, ueId, anoEscolar, turmaId);
+                var resultadoProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync2(request.Filtro, long.Parse(prova.Id), request.DresId, request.UesId);
                 if (resultadoProva != null && resultadoProva.Any())
                 {
                     resumoGeralProvas.Add(ObterResumoProva(resultadoProva));
@@ -53,6 +42,38 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             }
 
             return resumoGeralProvas.AsEnumerable();
+
+
+
+            //var anoLetivo = request.Filtro.AnoLetivo;
+            //var situacao = request.Filtro.ProvaSituacao;
+            //var provaIds = request.Filtro.ProvasId;
+            //var modalidade = request.Filtro.Modalidade;
+            //var dreId = request.Filtro.DreId;
+            //var ueId = request.Filtro.UeId != null ? Convert.ToInt32(request.Filtro.UeId) : (int?)null;
+            //var anoEscolar = request.Filtro.AnoEscolar != null ? Convert.ToString(request.Filtro.AnoEscolar) : string.Empty;
+            //var turmaId = request.Filtro.TurmaId;
+
+            //var resumoGeralProvas = new List<ResumoGeralProvaDto>();
+
+            //var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(anoLetivo, situacao);
+
+            //if (provaIds != null && provaIds.Any())
+            //    provas = provas.Where(p => provaIds.Any(x => x.ToString() == p.Id));
+
+            //if (modalidade != null)
+            //    provas = provas.Where(p => p.Modalidade == modalidade);
+
+            //foreach (var prova in provas)
+            //{
+            //    var resultadoProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(long.Parse(prova.Id), dreId, ueId, anoEscolar, turmaId, request.DresId, request.UesId);
+            //    if (resultadoProva != null && resultadoProva.Any())
+            //    {
+            //        resumoGeralProvas.Add(ObterResumoProva(resultadoProva));
+            //    }
+            //}
+
+            //return resumoGeralProvas.AsEnumerable();
         }
 
         private ResumoGeralProvaDto ObterResumoProva(IEnumerable<ProvaTurmaResultado> resultadoProva)

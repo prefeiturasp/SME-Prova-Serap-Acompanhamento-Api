@@ -7,10 +7,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
 {
     public interface IRepositorioProvaTurmaResultado : IRepositorioBase<ProvaTurmaResultado>
     {
-        Task<IEnumerable<ProvaTurmaResultado>> ObterResumoGeralPorFiltroAsync(long provaId, int? dreId, int? ueId, string anoEscolar, long? turmaId);
-        Task<double> ObterTotalProvasFinalizadasPorFiltroAsync(FiltroDto filtro);
-        Task<double> ObterTotalProvasIniciadasHojePorFiltroAsync(FiltroDto filtro);
-        Task<double> ObterTotalProvasNaoFinalizadasPorFiltroAsync(FiltroDto filtro);
-        Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro);
+        Task<IEnumerable<ProvaTurmaResultado>> ObterResumoGeralPorFiltroAsync(long provaId, int? dreId, int? ueId, string anoEscolar, long? turmaId, long[] dresId, long[] uesId);
+        Task<IEnumerable<ProvaTurmaResultado>> ObterResumoGeralPorFiltroAsync2(FiltroDto filtro, long provaId, long[] dresId, long[] uesId);
+        Task<double> ObterTotalProvasFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId);
+        Task<double> ObterTotalProvasIniciadasHojePorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId);
+        Task<double> ObterTotalProvasNaoFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId);
+        Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId);
     }
 }
