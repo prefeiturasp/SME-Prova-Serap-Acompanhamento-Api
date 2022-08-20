@@ -14,9 +14,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
         public async Task<ResumoGeralDto> Executar(FiltroDto filtro)
         {
+            var dresId = await mediator.Send(new ObterDresUsuarioLogadoQuery());
+            var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
+
             var numeroPagina = filtro.NumeroPagina;
             var numeroRegistros = filtro.NumeroRegistros;
-            var resumoGeralProvas = await mediator.Send(new ObterResumoGeralProvaQuery(filtro));
+            var resumoGeralProvas = await mediator.Send(new ObterResumoGeralProvaQuery(filtro, dresId, uesId));
             var resumoGeral = new ResumoGeralDto();
 
             if (numeroPagina <= 1)
