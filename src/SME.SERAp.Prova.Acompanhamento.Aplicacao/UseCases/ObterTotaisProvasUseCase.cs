@@ -29,7 +29,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             listaTotais.Add(new TotalDto("Provas Iniciadas hoje", "#198459", totalIniciadas.ToString()));
 
             var totalNaoFinalizadas = await repositorioProvaTurmaResultado.ObterTotalProvasNaoFinalizadasPorFiltroAsync(filtro);
-            listaTotais.Add(new TotalDto("Provas Não Finalizadas", "#B40C02", totalNaoFinalizadas.ToString()));
+            var provasNaoFinalizadas = new TotalDto("Provas Não Finalizadas", "#B40C02", totalNaoFinalizadas.ToString());
+            provasNaoFinalizadas.Tooltip = "Provas iniciadas em dias anteriores e não finalizadas.";
+            listaTotais.Add(provasNaoFinalizadas);
 
             var totalFinalizadas = await repositorioProvaTurmaResultado.ObterTotalProvasFinalizadasPorFiltroAsync(filtro);
             listaTotais.Add(new TotalDto("Provas Finalizadas", "#198459", totalFinalizadas.ToString()));
