@@ -11,5 +11,6 @@
         public string Titulo { get; set; }
         public string Cor { get; set; }
         public string Valor { get; set; }
+        public string Tooltip { get; set; }
     }
 }
