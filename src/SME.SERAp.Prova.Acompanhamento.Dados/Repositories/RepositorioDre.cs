@@ -20,8 +20,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             QueryContainer query = new QueryContainerDescriptor<Dre>();
 
             foreach (var id in ids)
-                query = query && new QueryContainerDescriptor<Dre>().Term(p => p.Field(p => p.Id).Value(id));
-
+                query = query || new QueryContainerDescriptor<Dre>().Term(p => p.Field(p => p.Id).Value(id));
 
             var search = new SearchDescriptor<Ue>(IndexName).Query(_ => query).From(0).Size(10000);
 
