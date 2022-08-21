@@ -1,0 +1,15 @@
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\bin\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.deps.json
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\bin\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.dll
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\bin\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.pdb
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\bin\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Dominio.dll
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\bin\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Dominio.pdb
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.csproj.AssemblyReference.cache
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.AssemblyInfoInputs.cache
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.AssemblyInfo.cs
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.csproj.CoreCompileInputs.cache
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.csproj.CopyComplete
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.dll
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\refint\SME.SERAp.Prova.Acompanhamento.Infra.dll
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\SME.SERAp.Prova.Acompanhamento.Infra.pdb
+C:\Users\AMcom\source\repos\SME-Serap-Acompanhamento-Api\src\SME.SERAp.Prova.Acompanhamento.Infra\obj\Debug\net5.0\ref\SME.SERAp.Prova.Acompanhamento.Infra.dll
