@@ -10,13 +10,14 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
 {
     public abstract class RepositorioBase<TEntidade> : IRepositorioBase<TEntidade> where TEntidade : EntidadeBase
     {
-        private readonly IElasticClient elasticClient;
+        protected readonly IElasticClient elasticClient;
 
-        public abstract string IndexName { get; }
+        protected abstract string IndexName { get; }
 
         public RepositorioBase(IElasticClient elasticClient)
         {
-            this.elasticClient = elasticClient ?? throw new ArgumentException(nameof(elasticClient));
+            this.elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
+            _ = CriarIndexAsync().Result;
         }
 
         public async Task<bool> CriarIndexAsync()
@@ -52,7 +53,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
             return true;
         }
 
-        public virtual async Task<bool> DeletarAsync(string id)
+        public virtual async Task<bool> DeletarAsync(long id)
         {
             var response = await elasticClient.DeleteAsync(DocumentPath<TEntidade>.Id(id).Index(IndexName));
 
@@ -62,7 +63,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
             return true;
         }
 
-        public async Task<TEntidade> ObterPorIdAsync(string id)
+        public async Task<TEntidade> ObterPorIdAsync(long id)
         {
             var response = await elasticClient.GetAsync(DocumentPath<TEntidade>.Id(id).Index(IndexName));
 
@@ -74,7 +75,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
 
         public async Task<IEnumerable<TEntidade>> ObterTodosAsync()
         {
-            var search = new SearchDescriptor<TEntidade>(IndexName).MatchAll();
+            var search = new SearchDescriptor<TEntidade>(IndexName);
             var response = await elasticClient.SearchAsync<TEntidade>(search);
 
             if (!response.IsValid)
