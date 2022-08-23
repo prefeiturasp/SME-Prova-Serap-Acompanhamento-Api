@@ -30,6 +30,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             if (dresUesTurmas != null && dresUesTurmas.Any())
                 return Task.FromResult(dresUesTurmas
                     .Select(t => long.Parse(t.Value.Split("-")[1]))
+                    .Where(a => a > 0)
                     .ToArray());
 
             return default;

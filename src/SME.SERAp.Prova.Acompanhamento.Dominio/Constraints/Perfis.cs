@@ -33,7 +33,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Constraints
         public static bool PerfilEhAdministrador(string perfil)
         {
             var ehGuid = Guid.TryParse(perfil, out var guidPerfil);
-            return ehGuid && 
+            return ehGuid &&
                 PerfilEhValido(perfil) &&
                 (guidPerfil == Perfis.PERFIL_ADMINISTRADOR ||
                 guidPerfil == Perfis.PERFIL_ADMINISTRADOR_NTA);
