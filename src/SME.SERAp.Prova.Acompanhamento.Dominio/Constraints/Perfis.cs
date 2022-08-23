@@ -35,7 +35,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Constraints
             var ehGuid = Guid.TryParse(perfil, out var guidPerfil);
             return ehGuid &&
                 PerfilEhValido(perfil) &&
-                guidPerfil == Perfis.PERFIL_ADMINISTRADOR;
+                (guidPerfil == Perfis.PERFIL_ADMINISTRADOR ||
+                guidPerfil == Perfis.PERFIL_ADMINISTRADOR_NTA);
         }
     }
 }
