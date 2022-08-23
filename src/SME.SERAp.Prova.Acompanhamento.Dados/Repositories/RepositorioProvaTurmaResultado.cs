@@ -102,11 +102,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             QueryContainer query = new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.AnoLetivo).Value(filtro.AnoLetivo));
 
-            if(dresId != null && dresId.Any())
+            if (dresId != null && dresId.Any())
             {
                 QueryContainer queryDres = new QueryContainerDescriptor<ProvaTurmaResultado>();
 
-                foreach(var id in dresId)
+                foreach (var id in dresId)
                     queryDres = queryDres || new QueryContainerDescriptor<ProvaTurmaResultado>().Term(d => d.Field(f => f.DreId).Value(id));
 
                 query = query && (queryDres);

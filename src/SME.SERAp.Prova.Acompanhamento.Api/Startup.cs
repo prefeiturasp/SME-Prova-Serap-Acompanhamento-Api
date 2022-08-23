@@ -1,6 +1,7 @@
 using Elastic.Apm.AspNetCore;
 using Elastic.Apm.DiagnosticSource;
 using Elastic.Apm.SqlClient;
+using Elastic.Apm.StackExchange.Redis;
 using Elasticsearch.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using RabbitMQ.Client;
 using SME.SERAp.Prova.Acompanhamento.Api.Configurations;
 using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using SME.SERAp.Prova.Acompanhamento.IoC;
+using StackExchange.Redis;
 using System;
 
 namespace SME.SERAp.Prova.Acompanhamento.Api
@@ -94,6 +96,18 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             var conexaoRabbitLog = factoryLog.CreateConnection();
             IModel channelLog = conexaoRabbitLog.CreateModel();
 
+            var redisOptions = new RedisOptions();
+            Configuration.GetSection(RedisOptions.Secao).Bind(redisOptions, c => c.BindNonPublicProperties = true);
+
+            var redisConfigurationOptions = new ConfigurationOptions()
+            {
+                Proxy = redisOptions.Proxy,
+                SyncTimeout = redisOptions.SyncTimeout,
+                EndPoints = { redisOptions.Endpoint }
+            };
+            var muxer = ConnectionMultiplexer.Connect(redisConfigurationOptions);
+            services.AddSingleton<IConnectionMultiplexer>(muxer);
+
             var telemetriaOptions = new TelemetriaOptions();
             Configuration.GetSection(TelemetriaOptions.Secao).Bind(telemetriaOptions, c => c.BindNonPublicProperties = true);
             services.AddSingleton(telemetriaOptions);
@@ -104,6 +118,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             app.UseElasticApm(Configuration,
               new SqlClientDiagnosticSubscriber(),
               new HttpDiagnosticsSubscriber());
+
+            var muxer = app.ApplicationServices.GetService<IConnectionMultiplexer>();
+            muxer.UseElasticApm();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SME.SERAp.Prova.Acompanhamento.Api v1"));

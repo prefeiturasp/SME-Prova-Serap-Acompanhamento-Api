@@ -4,6 +4,7 @@ using SME.SERAp.Prova.Acompanhamento.Aplicacao;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases;
 using SME.SERAp.Prova.Acompanhamento.Dados;
+using SME.SERAp.Prova.Acompanhamento.Dados.Cache;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dados.Repositories;
 using SME.SERAp.Prova.Acompanhamento.Infra.Interfaces;
@@ -31,7 +32,7 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
 
         private static void RegistrarRepositorios(IServiceCollection services)
         {
-            services.AddScoped<IRepositorioAutenticacao, RepositorioAutenticacao>();
+            services.AddScoped<IRepositorioCache, RepositorioCache>();
             services.AddScoped<IRepositorioAbrangencia, RepositorioAbrangencia>();
             services.AddScoped<IRepositorioDre, RepositorioDre>();
             services.AddScoped<IRepositorioUe, RepositorioUe>();
