@@ -6,7 +6,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Enums
     {
 
         NaoCadastrado = 0,
-     
+
         [Description("Educação de Jovens e Adultos")]
         EJA = 3,
 
