@@ -86,17 +86,17 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             resumoProva.ProvasIniciadas = resultadoProva.Sum(p => p.TotalIniciadas);
             resumoProva.ProvasNaoFinalizadas = resultadoProva.Sum(p => p.TotalNaoFinalizados);
             resumoProva.ProvasFinalizadas = resultadoProva.Sum(p => p.TotalFinalizados);
-            resumoProva.TempoMedio = ObterTempoMedio(resultadoProva);
+            resumoProva.TempoMedio = ObterTempoMedio(resultadoProva, resumoProva.ProvasFinalizadas);
             resumoProva.PercentualRealizado = ObterPercentualRealizadoResumoProva(resumoProva.ProvasFinalizadas, resumoProva.TotalAlunos);
             resumoProva.DetalheProva = ObterDetalheProva(resultadoProva);
             return resumoProva;
         }
 
-        private int ObterTempoMedio(IEnumerable<ProvaTurmaResultado> resultadoProva)
+        private int ObterTempoMedio(IEnumerable<ProvaTurmaResultado> resultadoProva, long provasFinalizadas)
         {
-            var somaTempoMedio = resultadoProva.Sum(p => p.TempoMedio);
-            var qtde = resultadoProva.Count();
-            var media = somaTempoMedio / qtde;
+            var somaTempoMedio = resultadoProva.Where(p => p.TempoMedio > 0).Sum(p => p.TempoMedio);
+            if (provasFinalizadas == 0) return 0;
+            var media = somaTempoMedio / provasFinalizadas;
             return Convert.ToInt32(media);
         }
 

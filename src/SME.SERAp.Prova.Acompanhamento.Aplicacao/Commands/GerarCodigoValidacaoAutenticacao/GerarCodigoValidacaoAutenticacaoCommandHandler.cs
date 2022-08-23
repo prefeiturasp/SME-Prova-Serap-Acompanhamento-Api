@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
-using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
+using SME.SERAp.Prova.Acompanhamento.Infra.Cache;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System;
 using System.Threading;
@@ -10,17 +10,20 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
     public class GerarCodigoValidacaoAutenticacaoCommandHandler : IRequestHandler<GerarCodigoValidacaoAutenticacaoCommand, AutenticacaoValidarDto>
     {
-        public readonly IRepositorioAutenticacao repositorioAutenticacao;
+        public readonly IRepositorioCache repositorioCache;
 
-        public GerarCodigoValidacaoAutenticacaoCommandHandler(IRepositorioAutenticacao repositorioAutenticacao)
+        public GerarCodigoValidacaoAutenticacaoCommandHandler(IRepositorioCache repositorioCache)
         {
-            this.repositorioAutenticacao = repositorioAutenticacao;
+            this.repositorioCache = repositorioCache ?? throw new ArgumentNullException(nameof(repositorioCache));
         }
 
         public async Task<AutenticacaoValidarDto> Handle(GerarCodigoValidacaoAutenticacaoCommand request, CancellationToken cancellationToken)
         {
             var codigo = Guid.NewGuid();
-            await repositorioAutenticacao.InserirAsync(new Autenticacao(codigo, request.Abrangencias));
+            var chave = string.Format(CacheChave.Autenticacao, codigo);
+
+            await repositorioCache.SalvarRedisAsync(chave, request.Abrangencias);
+
             return new AutenticacaoValidarDto(codigo.ToString());
         }
     }
