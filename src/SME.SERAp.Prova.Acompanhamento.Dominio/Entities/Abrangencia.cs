@@ -2,6 +2,7 @@
 {
     public class Abrangencia : EntidadeBase
     {
+        public Abrangencia() { }
         public Abrangencia(long id, string login, string usuario, string coressoId, string grupo, long dreId, long ueId, long turmaId)
         {
             Id = id.ToString();
