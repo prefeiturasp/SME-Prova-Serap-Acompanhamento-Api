@@ -53,12 +53,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
             return Ok(await obterDreUsuarioLogadoUseCase.Executar());
         }
 
-        [HttpGet("ue/{dreId}")]
+        [HttpGet("ue/{dreId}/modalidade/{modalidade}")]
         [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterUes(long dreId, [FromServices] IObterUeUsuarioLogadoUseCase obterUeUsuarioLogadoUseCase)
+        public async Task<IActionResult> ObterUes(long dreId, Modalidade? modalidade, [FromServices] IObterUeUsuarioLogadoUseCase obterUeUsuarioLogadoUseCase)
         {
-            return Ok(await obterUeUsuarioLogadoUseCase.Executar(dreId));
+            return Ok(await obterUeUsuarioLogadoUseCase.Executar(dreId, modalidade));
         }
 
         [HttpGet("ano/{anoLetivo}/modalidade/{modalidade}/ue/{ueId}")]

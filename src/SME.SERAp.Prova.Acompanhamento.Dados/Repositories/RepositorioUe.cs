@@ -20,11 +20,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             if (ids != null && ids.Any())
             {
-                QueryContainer queryIds = new QueryContainerDescriptor<Ue>();
-                foreach (var id in ids)
-                    queryIds = queryIds || new QueryContainerDescriptor<Ue>().Term(p => p.Field(p => p.Id).Value(id));
-
-                query = query && (queryIds);
+                if (ids[0] > 0)
+                {
+                    QueryContainer queryIds = new QueryContainerDescriptor<Ue>();
+                    foreach (var id in ids)
+                        queryIds = queryIds || new QueryContainerDescriptor<Ue>().Term(p => p.Field(p => p.Id).Value(id));
+                    query = query && (queryIds);
+                }
             }
 
             var search = new SearchDescriptor<Ue>(IndexName).Query(_ => query).From(0).Size(10000);

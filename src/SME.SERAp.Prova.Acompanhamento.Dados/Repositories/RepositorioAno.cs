@@ -2,6 +2,7 @@
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,5 +29,38 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             return response.Hits.Select(hit => hit.Source).ToList();
         }
+
+        public async Task<IEnumerable<Ano>> ObterPorAnoLetivoModalidadeAsync(Modalidade? modalidade, string[] uesId)
+        {
+            QueryContainer query = new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.AnoLetivo).Value(DateTime.Now.Year));
+
+
+            if (modalidade != null && modalidade > 0)
+            {
+                query = query && new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.Modalidade).Value(modalidade));
+            }
+
+            if (uesId != null && uesId.Any())
+            {
+                if (uesId[0] != "0")
+                {
+                    QueryContainer queryIds = new QueryContainerDescriptor<Ano>();
+                    foreach (var id in uesId)
+                        queryIds = queryIds || new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.UeId).Value(id));
+                    query = query && (queryIds);
+                }
+            }
+
+
+            var search = new SearchDescriptor<Ano>(IndexName).Query(_ => query).From(0).Size(10000);
+            var response = await elasticClient.SearchAsync<Ano>(search);
+
+            if (!response.IsValid) return default;
+
+            return response.Hits.Select(hit => hit.Source).ToList();
+        }
+
+
+
     }
 }
