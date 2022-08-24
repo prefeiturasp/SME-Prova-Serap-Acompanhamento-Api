@@ -27,13 +27,14 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
             var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(request.Filtro.AnoLetivo, request.Filtro.ProvaSituacao);
 
-            resumoGeral.TotalRegistros = provas.Count();
-            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / request.NumeroRegistros);
+            if(request.Filtro.ProvasId != null && request.Filtro.ProvasId.Any())
+            {
+                provas = provas.Where(p => request.Filtro.ProvasId.Any(n => n.ToString() == p.Id));
+            }
 
-            var skip = (request.NumeroPagina - 1) * request.NumeroRegistros;
-            provas = provas.OrderBy(o => o.Descricao).Skip(skip).Take(request.NumeroRegistros);
+            provas = provas.OrderBy(o => o.Descricao);
 
-            resumoGeral.Items = new List<ResumoGeralProvaDto>();
+            var resumoGeralProvas = new List<ResumoGeralProvaDto>();
             foreach (var prova in provas)
             {
                 var resumoGeralProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(request.Filtro, long.Parse(prova.Id), request.DresId, request.UesId);
@@ -43,8 +44,15 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                 resumoGeralProva.DetalheProva.DataInicio = prova.Inicio;
                 resumoGeralProva.DetalheProva.DataFim = prova.Fim;
 
-                resumoGeral.Items.Add(resumoGeralProva);
+                if(resumoGeralProva != null && resumoGeralProva.TotalAlunos > 0)
+                    resumoGeralProvas.Add(resumoGeralProva);
             }
+
+            resumoGeral.TotalRegistros = resumoGeralProvas.Count();
+            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / request.NumeroRegistros);
+
+            var skip = (request.NumeroPagina - 1) * request.NumeroRegistros;
+            resumoGeral.Items = resumoGeralProvas.Skip(skip).Take(request.NumeroRegistros).ToList();
 
             return resumoGeral;
         }
