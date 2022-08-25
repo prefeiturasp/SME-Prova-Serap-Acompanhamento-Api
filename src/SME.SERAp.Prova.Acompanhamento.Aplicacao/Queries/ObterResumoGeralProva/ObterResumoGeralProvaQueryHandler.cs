@@ -43,8 +43,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                 resumoGeralProva.TituloProva = prova.Descricao;
                 resumoGeralProva.DetalheProva.DataInicio = prova.Inicio;
                 resumoGeralProva.DetalheProva.DataFim = prova.Fim;
+                resumoGeralProva.TempoMedio = ObterTempoMedio(resumoGeralProva);
 
-                if(resumoGeralProva != null && resumoGeralProva.TotalAlunos > 0)
+                if (resumoGeralProva != null && resumoGeralProva.TotalAlunos > 0)
                     resumoGeralProvas.Add(resumoGeralProva);
             }
 
@@ -55,6 +56,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             resumoGeral.Items = resumoGeralProvas.Skip(skip).Take(request.NumeroRegistros).ToList();
 
             return resumoGeral;
+        }
+
+        private long ObterTempoMedio(ResumoGeralProvaDto resumoGeralProva)
+        {
+            if (resumoGeralProva.TotalTempoMedio == 0) return 0;
+            return (int)(resumoGeralProva.TotalTempoMedio / resumoGeralProva.TotalTurmas);
         }
     }
 }

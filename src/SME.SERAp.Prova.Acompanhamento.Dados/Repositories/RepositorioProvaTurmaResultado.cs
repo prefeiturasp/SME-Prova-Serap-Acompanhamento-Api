@@ -84,7 +84,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
 
-            var resultado = new List<ProvaTurmaResultado>();
+            var resultado = new List<ProvaTurmaResultado>();                        
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(_ => query)
@@ -101,6 +101,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
 
+            var totalTurmas = await ObterTotalTurmas(query);
+
             var resumoGeralProvaDto = new ResumoGeralProvaDto()
             {
                 TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
@@ -113,10 +115,24 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     QtdeQuestoesProva = Convert.ToInt64(response.Aggregations.ValueCount("QtdeQuestoesProva").Value.GetValueOrDefault()),
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
-                }
+                },
+                TotalTurmas = (long)Math.Ceiling(totalTurmas)
             };
 
             return resumoGeralProvaDto;
+        }
+
+        public async Task<double> ObterTotalTurmas(QueryContainer query)
+        {
+            var searchTotalTurmas = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
+                .Query(q => !q.Term(p => p.TempoMedio, 0) && query)
+                .Size(0)
+                .Aggregations(a => a.ValueCount("TotalTurmas", c => c.Field(p => p.TurmaId)));
+
+            var responseTotalTurmas = await elasticClient.SearchAsync<ProvaTurmaResultado>(searchTotalTurmas);
+            if (!responseTotalTurmas.IsValid) return 0;
+
+            return responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
         }
 
         public async Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId)

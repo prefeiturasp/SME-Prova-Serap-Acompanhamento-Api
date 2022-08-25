@@ -17,14 +17,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public long ProvasNaoFinalizadas { get; set; }
         public long ProvasFinalizadas { get; set; }
         public long TotalTempoMedio { get; set; }
-        public long TempoMedio
-        {
-            get
-            {
-                if (TotalTempoMedio == 0 || ProvasFinalizadas == 0) return 0;
-                return Convert.ToInt32(TotalTempoMedio / ProvasFinalizadas);
-            }
-        }
+        public long TempoMedio { get; set; }
         public decimal PercentualRealizado
         {
             get
@@ -35,5 +28,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
             }
         }
         public DetalheProvaDto DetalheProva { get; set; }
+        public long TotalTurmas { get; set; }
     }
 }
