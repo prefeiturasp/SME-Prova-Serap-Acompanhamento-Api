@@ -15,7 +15,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
             FezDownload = fezDownload;
             InicioProva = inicioProva;
             FimProva = fimProva;
-            TempoMedio = tempoMedio;
+            TempoMedio = CalcularTempoMedioEmMinutos(tempoMedio);
             QuestoesRespondidas = questoesRespondidas;
         }
 
@@ -25,6 +25,15 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public DateTime? FimProva { get; set; }
         public long? TempoMedio { get; set; }
         public int? QuestoesRespondidas { get; set; }
+
+        private long? CalcularTempoMedioEmMinutos(long? tempoMedio)
+        {
+            if (tempoMedio == null || tempoMedio == 0)
+                return tempoMedio;
+            if (tempoMedio < 60)
+                return 0;
+            return tempoMedio / 60;
+        }
 
     }
 }

@@ -4,6 +4,7 @@ using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
+using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 {
     public class RepositorioProvaTurmaResultado : RepositorioBase<ProvaTurmaResultado>, IRepositorioProvaTurmaResultado
     {
-        protected override string IndexName => "prova-turma-resultado";
-        public RepositorioProvaTurmaResultado(IElasticClient elasticClient) : base(elasticClient) { }
+        public RepositorioProvaTurmaResultado(ElasticOptions elasticOptions, IElasticClient elasticClient) : base(elasticOptions, elasticClient)
+        {
+        }
 
         private static QueryContainer MontarQueryFiltro(FiltroDto filtro, long[] dresId, long[] uesId)
         {
@@ -101,6 +103,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
 
+            var totalTurmas = await ObterTotalTurmas(query);
+
             var resumoGeralProvaDto = new ResumoGeralProvaDto()
             {
                 TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
@@ -113,10 +117,24 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     QtdeQuestoesProva = Convert.ToInt64(response.Aggregations.ValueCount("QtdeQuestoesProva").Value.GetValueOrDefault()),
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
-                }
+                },
+                TotalTurmas = (long)Math.Ceiling(totalTurmas)
             };
 
             return resumoGeralProvaDto;
+        }
+
+        public async Task<double> ObterTotalTurmas(QueryContainer query)
+        {
+            var searchTotalTurmas = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
+                .Query(q => !q.Term(p => p.TempoMedio, 0) && query)
+                .Size(0)
+                .Aggregations(a => a.ValueCount("TotalTurmas", c => c.Field(p => p.TurmaId)));
+
+            var responseTotalTurmas = await elasticClient.SearchAsync<ProvaTurmaResultado>(searchTotalTurmas);
+            if (!responseTotalTurmas.IsValid) return 0;
+
+            return responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
         }
 
         public async Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId)

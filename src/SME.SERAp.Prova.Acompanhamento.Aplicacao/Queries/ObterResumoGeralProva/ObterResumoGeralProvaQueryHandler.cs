@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
-using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
     {
         private readonly IRepositorioProva repositorioProva;
         private readonly IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado;
-        
+
         public ObterResumoGeralProvaQueryHandler(IRepositorioProva repositorioProva, IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado)
         {
             this.repositorioProva = repositorioProva ?? throw new ArgumentNullException(nameof(repositorioProva));
@@ -27,7 +26,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
             var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(request.Filtro.AnoLetivo, request.Filtro.ProvaSituacao);
 
-            if(request.Filtro.ProvasId != null && request.Filtro.ProvasId.Any())
+            if (request.Filtro.ProvasId != null && request.Filtro.ProvasId.Any())
             {
                 provas = provas.Where(p => request.Filtro.ProvasId.Any(n => n.ToString() == p.Id));
             }
@@ -43,8 +42,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                 resumoGeralProva.TituloProva = prova.Descricao;
                 resumoGeralProva.DetalheProva.DataInicio = prova.Inicio;
                 resumoGeralProva.DetalheProva.DataFim = prova.Fim;
+                resumoGeralProva.TempoMedio = ObterTempoMedio(resumoGeralProva);
 
-                if(resumoGeralProva != null && resumoGeralProva.TotalAlunos > 0)
+                if (resumoGeralProva != null && resumoGeralProva.TotalAlunos > 0)
                     resumoGeralProvas.Add(resumoGeralProva);
             }
 
@@ -55,6 +55,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             resumoGeral.Items = resumoGeralProvas.Skip(skip).Take(request.NumeroRegistros).ToList();
 
             return resumoGeral;
+        }
+
+        private long ObterTempoMedio(ResumoGeralProvaDto resumoGeralProva)
+        {
+            if (resumoGeralProva.TotalTempoMedio == 0) return 0;
+            return (int)(resumoGeralProva.TotalTempoMedio / resumoGeralProva.TotalTurmas);
         }
     }
 }
