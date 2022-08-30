@@ -7,6 +7,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces
 {
     public interface IObterUeUsuarioLogadoUseCase
     {
-        Task<IEnumerable<SelecioneDto>> Executar(long dreId, Modalidade? modalidade);
+        Task<IEnumerable<SelecioneDto>> Executar(int anoLetivo, Modalidade modalidade, long dreId);
     }
 }

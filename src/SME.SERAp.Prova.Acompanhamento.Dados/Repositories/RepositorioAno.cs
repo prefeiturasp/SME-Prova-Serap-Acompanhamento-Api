@@ -30,15 +30,10 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             return response.Hits.Select(hit => hit.Source).ToList();
         }
 
-        public async Task<IEnumerable<Ano>> ObterPorAnoLetivoModalidadeAsync(Modalidade? modalidade, string[] uesId)
+        public async Task<string[]> ObterUesIdPorAnoLetivoModalidadeAsync(int anoLetivo, Modalidade modalidade, string[] uesId)
         {
-            QueryContainer query = new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.AnoLetivo).Value(DateTime.Now.Year));
-
-
-            if (modalidade != null && modalidade > 0)
-            {
-                query = query && new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.Modalidade).Value(modalidade));
-            }
+            QueryContainer query = new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.AnoLetivo).Value(anoLetivo))
+                && new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.Modalidade).Value(modalidade));
 
             if (uesId != null && uesId.Any())
             {
@@ -51,16 +46,14 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                 }
             }
 
-
-            var search = new SearchDescriptor<Ano>(IndexName).Query(_ => query).From(0).Size(10000);
+            var search = new SearchDescriptor<Ano>(IndexName)
+                .Query(_ => query).Size(0)
+                .Aggregations(a => a.Terms("uesId", t => t.Field(f => f.UeId).Size(10000)));
             var response = await elasticClient.SearchAsync<Ano>(search);
 
             if (!response.IsValid) return default;
 
-            return response.Hits.Select(hit => hit.Source).ToList();
+            return response.Aggregations.Terms("uesId").Buckets.Select(t => t.Key).ToArray();
         }
-
-
-
     }
 }

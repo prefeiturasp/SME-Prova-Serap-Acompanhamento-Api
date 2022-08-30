@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries
 {
-    public class ObterAnosPorModalidadeEscolasQueryHandler : IRequestHandler<ObterAnosPorModalidadeEscolasQuery, IEnumerable<Ano>>
+    public class ObterUesIdPorAnoLetivoModalidadeQueryHandler : IRequestHandler<ObterUesIdPorAnoLetivoModalidadeQuery, string[]>
     {
         private readonly IRepositorioAno repositorioAno;
 
-        public ObterAnosPorModalidadeEscolasQueryHandler(IRepositorioAno repositorioAno)
+        public ObterUesIdPorAnoLetivoModalidadeQueryHandler(IRepositorioAno repositorioAno)
         {
             this.repositorioAno = repositorioAno ?? throw new ArgumentNullException(nameof(repositorioAno));
         }
 
-        public async Task<IEnumerable<Ano>> Handle(ObterAnosPorModalidadeEscolasQuery request, CancellationToken cancellationToken)
+        public async Task<string[]> Handle(ObterUesIdPorAnoLetivoModalidadeQuery request, CancellationToken cancellationToken)
         {
-            return await repositorioAno.ObterPorAnoLetivoModalidadeAsync(request.Modalidade, request.UeId);
+            return await repositorioAno.ObterUesIdPorAnoLetivoModalidadeAsync(request.AnoLetivo, request.Modalidade, request.UesId);
         }
     }
 }
