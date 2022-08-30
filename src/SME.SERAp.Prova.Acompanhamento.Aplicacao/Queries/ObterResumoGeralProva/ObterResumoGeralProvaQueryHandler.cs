@@ -10,120 +10,58 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
-    public class ObterResumoGeralProvaQueryHandler : IRequestHandler<ObterResumoGeralProvaQuery, IEnumerable<ResumoGeralProvaDto>>
+    public class ObterResumoGeralProvaQueryHandler : IRequestHandler<ObterResumoGeralProvaQuery, ResumoGeralDto>
     {
-
-        private readonly IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado;
         private readonly IRepositorioProva repositorioProva;
-
-        public ObterResumoGeralProvaQueryHandler(IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado, IRepositorioProva repositorioProva)
+        private readonly IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado;
+        
+        public ObterResumoGeralProvaQueryHandler(IRepositorioProva repositorioProva, IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado)
         {
-            this.repositorioProvaTurmaResultado = repositorioProvaTurmaResultado ?? throw new ArgumentNullException(nameof(repositorioProvaTurmaResultado));
             this.repositorioProva = repositorioProva ?? throw new ArgumentNullException(nameof(repositorioProva));
+            this.repositorioProvaTurmaResultado = repositorioProvaTurmaResultado ?? throw new ArgumentNullException(nameof(repositorioProvaTurmaResultado));
         }
 
-        public async Task<IEnumerable<ResumoGeralProvaDto>> Handle(ObterResumoGeralProvaQuery request, CancellationToken cancellationToken)
+        public async Task<ResumoGeralDto> Handle(ObterResumoGeralProvaQuery request, CancellationToken cancellationToken)
         {
-            var resumoGeralProvas = new List<ResumoGeralProvaDto>();
+            var resumoGeral = new ResumoGeralDto();
 
             var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(request.Filtro.AnoLetivo, request.Filtro.ProvaSituacao);
 
-            var provaIds = request.Filtro.ProvasId;
-            if (provaIds != null && provaIds.Any())
-                provas = provas.Where(p => provaIds.Any(x => x.ToString() == p.Id));
-
-            foreach (var prova in provas)
+            if(request.Filtro.ProvasId != null && request.Filtro.ProvasId.Any())
             {
-                var resultadoProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync2(request.Filtro, long.Parse(prova.Id), request.DresId, request.UesId);
-                if (resultadoProva != null && resultadoProva.Any())
-                {
-                    resumoGeralProvas.Add(ObterResumoProva(resultadoProva));
-                }
+                provas = provas.Where(p => request.Filtro.ProvasId.Any(n => n.ToString() == p.Id));
             }
 
-            return resumoGeralProvas.AsEnumerable();
+            provas = provas.OrderBy(o => o.Descricao);
 
+            var resumoGeralProvas = new List<ResumoGeralProvaDto>();
+            foreach (var prova in provas)
+            {
+                var resumoGeralProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(request.Filtro, long.Parse(prova.Id), request.DresId, request.UesId);
 
+                resumoGeralProva.ProvaId = long.Parse(prova.Id);
+                resumoGeralProva.TituloProva = prova.Descricao;
+                resumoGeralProva.DetalheProva.DataInicio = prova.Inicio;
+                resumoGeralProva.DetalheProva.DataFim = prova.Fim;
+                resumoGeralProva.TempoMedio = ObterTempoMedio(resumoGeralProva);
 
-            //var anoLetivo = request.Filtro.AnoLetivo;
-            //var situacao = request.Filtro.ProvaSituacao;
-            //var provaIds = request.Filtro.ProvasId;
-            //var modalidade = request.Filtro.Modalidade;
-            //var dreId = request.Filtro.DreId;
-            //var ueId = request.Filtro.UeId != null ? Convert.ToInt32(request.Filtro.UeId) : (int?)null;
-            //var anoEscolar = request.Filtro.AnoEscolar != null ? Convert.ToString(request.Filtro.AnoEscolar) : string.Empty;
-            //var turmaId = request.Filtro.TurmaId;
+                if (resumoGeralProva != null && resumoGeralProva.TotalAlunos > 0)
+                    resumoGeralProvas.Add(resumoGeralProva);
+            }
 
-            //var resumoGeralProvas = new List<ResumoGeralProvaDto>();
+            resumoGeral.TotalRegistros = resumoGeralProvas.Count();
+            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / request.NumeroRegistros);
 
-            //var provas = await repositorioProva.ObterProvaPorAnoLetivoSituacaoAsync(anoLetivo, situacao);
+            var skip = (request.NumeroPagina - 1) * request.NumeroRegistros;
+            resumoGeral.Items = resumoGeralProvas.Skip(skip).Take(request.NumeroRegistros).ToList();
 
-            //if (provaIds != null && provaIds.Any())
-            //    provas = provas.Where(p => provaIds.Any(x => x.ToString() == p.Id));
-
-            //if (modalidade != null)
-            //    provas = provas.Where(p => p.Modalidade == modalidade);
-
-            //foreach (var prova in provas)
-            //{
-            //    var resultadoProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(long.Parse(prova.Id), dreId, ueId, anoEscolar, turmaId, request.DresId, request.UesId);
-            //    if (resultadoProva != null && resultadoProva.Any())
-            //    {
-            //        resumoGeralProvas.Add(ObterResumoProva(resultadoProva));
-            //    }
-            //}
-
-            //return resumoGeralProvas.AsEnumerable();
+            return resumoGeral;
         }
 
-        private ResumoGeralProvaDto ObterResumoProva(IEnumerable<ProvaTurmaResultado> resultadoProva)
+        private long ObterTempoMedio(ResumoGeralProvaDto resumoGeralProva)
         {
-            var resumoProva = new ResumoGeralProvaDto();
-            var prova = resultadoProva.FirstOrDefault();
-            resumoProva.ProvaId = prova.ProvaId;
-            resumoProva.TituloProva = resultadoProva.Select(p => p.Descricao).FirstOrDefault();
-            resumoProva.TotalAlunos = resultadoProva.Sum(p => p.TotalAlunos);
-            resumoProva.ProvasIniciadas = resultadoProva.Sum(p => p.TotalIniciadas);
-            resumoProva.ProvasNaoFinalizadas = resultadoProva.Sum(p => p.TotalNaoFinalizados);
-            resumoProva.ProvasFinalizadas = resultadoProva.Sum(p => p.TotalFinalizados);
-            resumoProva.TempoMedio = ObterTempoMedio(resultadoProva, resumoProva.ProvasFinalizadas);
-            resumoProva.PercentualRealizado = ObterPercentualRealizadoResumoProva(resumoProva.ProvasFinalizadas, resumoProva.TotalAlunos);
-            resumoProva.DetalheProva = ObterDetalheProva(resultadoProva);
-            return resumoProva;
-        }
-
-        private int ObterTempoMedio(IEnumerable<ProvaTurmaResultado> resultadoProva, long provasFinalizadas)
-        {
-            var somaTempoMedio = resultadoProva.Where(p => p.TempoMedio > 0).Sum(p => p.TempoMedio);
-            if (provasFinalizadas == 0) return 0;
-            var media = somaTempoMedio / provasFinalizadas;
-            return Convert.ToInt32(media);
-        }
-
-        private DetalheProvaDto ObterDetalheProva(IEnumerable<ProvaTurmaResultado> resultadoProva)
-        {
-            var detalhe = new DetalheProvaDto();
-            var prova = resultadoProva.FirstOrDefault();
-            detalhe.DataInicio = prova.Inicio;
-            detalhe.DataFim = prova.Fim;
-            detalhe.QtdeQuestoesProva = Convert.ToInt32(prova.QuantidadeQuestoes);
-            detalhe.TotalQuestoes = resultadoProva.Sum(p => p.TotalQuestoes);
-            detalhe.Respondidas = resultadoProva.Sum(p => p.QuestoesRespondidas);
-            detalhe.PercentualRespondido = ObterPercentualRespondidoDetalheProva(detalhe.TotalQuestoes, detalhe.Respondidas);
-            return detalhe;
-        }
-
-        private decimal ObterPercentualRealizadoResumoProva(long provasFinalizadas, long totalAlunos)
-        {
-            var percentual = (provasFinalizadas * 100) / totalAlunos;
-            return percentual > 100 ? 100 : Math.Round(Convert.ToDecimal(percentual), 2);
-        }
-
-        private decimal ObterPercentualRespondidoDetalheProva(decimal totalQuestoes, decimal respondidas)
-        {
-            var percentual = (respondidas * 100) / totalQuestoes;
-            percentual = Convert.ToDecimal(percentual);
-            return percentual > 100 ? 100 : Math.Round(percentual, 2);
+            if (resumoGeralProva.TotalTempoMedio == 0) return 0;
+            return (int)(resumoGeralProva.TotalTempoMedio / resumoGeralProva.TotalTurmas);
         }
     }
 }

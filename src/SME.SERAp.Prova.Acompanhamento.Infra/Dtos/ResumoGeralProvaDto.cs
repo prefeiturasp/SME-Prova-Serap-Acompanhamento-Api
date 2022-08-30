@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace SME.SERAp.Prova.Acompanhamento.Infra
 {
     public class ResumoGeralProvaDto
@@ -14,9 +16,18 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public long ProvasIniciadas { get; set; }
         public long ProvasNaoFinalizadas { get; set; }
         public long ProvasFinalizadas { get; set; }
-        public int TempoMedio { get; set; }
-        public decimal PercentualRealizado { get; set; }
+        public long TotalTempoMedio { get; set; }
+        public long TempoMedio { get; set; }
+        public decimal PercentualRealizado
+        {
+            get
+            {
+                if (ProvasFinalizadas == 0 || TotalAlunos == 0) return 0;
+                var percentual = (ProvasFinalizadas * 100) / TotalAlunos;
+                return percentual > 100 ? 100 : Math.Round(Convert.ToDecimal(percentual), 2);
+            }
+        }
         public DetalheProvaDto DetalheProva { get; set; }
-
+        public long TotalTurmas { get; set; }
     }
 }
