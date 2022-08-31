@@ -4,7 +4,6 @@ using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +13,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 {
     public class RepositorioProvaTurmaResultado : RepositorioBase<ProvaTurmaResultado>, IRepositorioProvaTurmaResultado
     {
-        public RepositorioProvaTurmaResultado(ElasticOptions elasticOptions, IElasticClient elasticClient) : base(elasticOptions, elasticClient)
-        {
-        }
+        protected override string IndexName => "prova-turma-resultado";
+        public RepositorioProvaTurmaResultado(IElasticClient elasticClient) : base(elasticClient) { }
 
         private static QueryContainer MontarQueryFiltro(FiltroDto filtro, long[] dresId, long[] uesId)
         {
-            var now = DateTime.Now;
+            var now = DateTime.Now.ToString("yyyy-MM-ddT00:00:00.000'Z'");
 
             QueryContainer query = new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.AnoLetivo).Value(filtro.AnoLetivo));
 
@@ -86,7 +84,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
 
-            var resultado = new List<ProvaTurmaResultado>();
+            var resultado = new List<ProvaTurmaResultado>();                        
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(_ => query)
