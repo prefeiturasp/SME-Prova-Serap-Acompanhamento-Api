@@ -1,6 +1,7 @@
 ﻿using Nest;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
+using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,8 +10,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 {
     public class RepositorioUe : RepositorioBase<Ue>, IRepositorioUe
     {
-        protected override string IndexName => "ue";
-        public RepositorioUe(IElasticClient elasticClient) : base(elasticClient)
+        public RepositorioUe(ElasticOptions elasticOptions, IElasticClient elasticClient) : base(elasticOptions, elasticClient)
         {
         }
 
@@ -20,11 +20,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             if (ids != null && ids.Any())
             {
-                QueryContainer queryIds = new QueryContainerDescriptor<Ue>();
-                foreach (var id in ids)
-                    queryIds = queryIds || new QueryContainerDescriptor<Ue>().Term(p => p.Field(p => p.Id).Value(id));
-
-                query = query && (queryIds);
+                if (ids[0] > 0)
+                {
+                    QueryContainer queryIds = new QueryContainerDescriptor<Ue>();
+                    foreach (var id in ids)
+                        queryIds = queryIds || new QueryContainerDescriptor<Ue>().Term(p => p.Field(p => p.Id).Value(id));
+                    query = query && (queryIds);
+                }
             }
 
             var search = new SearchDescriptor<Ue>(IndexName).Query(_ => query).From(0).Size(10000);

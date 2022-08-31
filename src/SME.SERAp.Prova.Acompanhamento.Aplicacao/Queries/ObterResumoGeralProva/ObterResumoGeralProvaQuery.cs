@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System.Collections.Generic;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
