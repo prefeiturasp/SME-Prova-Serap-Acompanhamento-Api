@@ -18,7 +18,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
         private static QueryContainer MontarQueryFiltro(FiltroDto filtro, long[] dresId, long[] uesId)
         {
-            var now = DateTime.Now;
+            var now = DateTime.Now.ToString("yyyy-MM-ddT00:00:00.000'Z'");
 
             QueryContainer query = new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.AnoLetivo).Value(filtro.AnoLetivo));
 
