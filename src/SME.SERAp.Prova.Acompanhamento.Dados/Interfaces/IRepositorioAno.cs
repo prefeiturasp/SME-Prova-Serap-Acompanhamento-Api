@@ -8,6 +8,5 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
     public interface IRepositorioAno : IRepositorioBase<Ano>
     {
         Task<IEnumerable<Ano>> ObterPorAnoLetivoModalidadeUeIdAsync(int anoLetivo, Modalidade modalidade, long ueId);
-        Task<string[]> ObterUesIdPorAnoLetivoModalidadeAsync(int anoLetivo, Modalidade modalidade, string[] uesId);
     }
 }
