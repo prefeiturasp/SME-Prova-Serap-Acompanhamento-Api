@@ -29,20 +29,20 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
             return Ok(await obterDreUsuarioLogadoUseCase.Executar());
         }
 
-        [HttpGet("modalidade")]
-        [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
-        [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterModalidade([FromServices] IObterModalidadeUseCase obterModalidadeUseCase)
-        {
-            return Ok(await obterModalidadeUseCase.Executar());
-        }
-
         [HttpGet("prova/{anoLetivo}/situacao/{situacao}")]
         [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
         public async Task<IActionResult> ObterProva(int anoLetivo, ProvaSituacao situacao, [FromServices] IObterProvaUseCase obterProvaUseCase)
         {
             return Ok(await obterProvaUseCase.Executar(anoLetivo, situacao));
+        }
+
+        [HttpGet("modalidade")]
+        [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
+        [ProducesResponseType(typeof(RetornoBaseDto), 500)]
+        public async Task<IActionResult> ObterModalidade([FromServices] IObterModalidadeUseCase obterModalidadeUseCase)
+        {
+            return Ok(await obterModalidadeUseCase.Executar());
         }
 
         [HttpGet("dre")]
@@ -53,12 +53,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
             return Ok(await obterDreUsuarioLogadoUseCase.Executar());
         }
 
-        [HttpGet("ue/{anoLetivo}/modalidade/{modalidade}/dre/{dreId}")]
+        [HttpGet("ue/{dreId}")]
         [ProducesResponseType(typeof(List<SelecioneDto>), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterUes(int anoLetivo, Modalidade modalidade, long dreId, [FromServices] IObterUeUsuarioLogadoUseCase obterUeUsuarioLogadoUseCase)
+        public async Task<IActionResult> ObterUes(long dreId, [FromServices] IObterUeUsuarioLogadoUseCase obterUeUsuarioLogadoUseCase)
         {
-            return Ok(await obterUeUsuarioLogadoUseCase.Executar(anoLetivo, modalidade, dreId));
+            return Ok(await obterUeUsuarioLogadoUseCase.Executar(dreId));
         }
 
         [HttpGet("ano/{anoLetivo}/modalidade/{modalidade}/ue/{ueId}")]

@@ -2,7 +2,6 @@
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
-using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +10,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 {
     public class RepositorioTurma : RepositorioBase<Turma>, IRepositorioTurma
     {
-        public RepositorioTurma(ElasticOptions elasticOptions, IElasticClient elasticClient) : base(elasticOptions, elasticClient)
+        protected override string IndexName => "turma";
+        public RepositorioTurma(IElasticClient elasticClient) : base(elasticClient)
         {
         }
 

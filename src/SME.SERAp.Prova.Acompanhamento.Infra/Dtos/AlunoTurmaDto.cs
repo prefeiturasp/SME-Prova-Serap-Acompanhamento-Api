@@ -31,8 +31,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
             if (tempoMedio == null || tempoMedio == 0)
                 return tempoMedio;
             if (tempoMedio < 60)
-                return 0;
-            return tempoMedio / 60;
+                return 0;            
+            return tempoMedio / 60;            
         }
 
     }

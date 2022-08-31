@@ -1,7 +1,6 @@
 ﻿using Nest;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
-using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 {
     public class RepositorioDre : RepositorioBase<Dre>, IRepositorioDre
     {
-        public RepositorioDre(ElasticOptions elasticOptions, IElasticClient elasticClient) : base(elasticOptions, elasticClient)
+        protected override string IndexName => "dre";
+        public RepositorioDre(IElasticClient elasticClient) : base(elasticClient)
         {
         }
 
