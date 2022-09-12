@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
-using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Collections.Generic;
 using System.Linq;

@@ -45,21 +45,27 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                     principal = validator.ValidateToken(request.Token, validationParameters, out SecurityToken validatedToken);
 
                     if (principal.HasClaim(c => c.Type == "LOGIN") &&
+                        principal.HasClaim(c => c.Type == "USUARIOID") &&
                         principal.HasClaim(c => c.Type == "USUARIO") &&
-                        principal.HasClaim(c => c.Type == "CORESSOID") &&
+                        principal.HasClaim(c => c.Type == "GRUPOID") &&
                         principal.HasClaim(c => c.Type == "GRUPO") &&
+                        principal.HasClaim(c => c.Type == "PERMITECONSULTAR") &&
+                        principal.HasClaim(c => c.Type == "PERMITEALTERAR") &&
                         principal.HasClaim(c => c.Type == "DRE-UE-TURMA"))
                     {
                         var login = principal.Claims.FirstOrDefault(c => c.Type == "LOGIN").Value;
+                        var usuarioId = Guid.Parse(principal.Claims.FirstOrDefault(c => c.Type == "USUARIOID").Value);
                         var usuario = principal.Claims.FirstOrDefault(c => c.Type == "USUARIO").Value;
-                        var coressoId = principal.Claims.FirstOrDefault(c => c.Type == "CORESSOID").Value;
+                        var grupoId = Guid.Parse(principal.Claims.FirstOrDefault(c => c.Type == "GRUPOID").Value);
                         var grupo = principal.Claims.FirstOrDefault(c => c.Type == "GRUPO").Value;
+                        var permiteConsultar = bool.Parse(principal.Claims.FirstOrDefault(c => c.Type == "PERMITECONSULTAR").Value);
+                        var permiteAlterar = bool.Parse(principal.Claims.FirstOrDefault(c => c.Type == "PERMITEALTERAR").Value);
 
                         var abrangencias = new List<Abrangencia>();
                         foreach (var dreUeTurma in principal.Claims.Where(t => t.Type == "DRE-UE-TURMA"))
                         {
                             var codigos = dreUeTurma.Value.Split("-");
-                            abrangencias.Add(new Abrangencia(0, login, usuario, coressoId, grupo, long.Parse(codigos[0]), long.Parse(codigos[1]), long.Parse(codigos[2])));
+                            abrangencias.Add(new Abrangencia(usuarioId, login, usuario, grupoId, grupo, permiteConsultar, permiteAlterar, long.Parse(codigos[0]), long.Parse(codigos[1]), long.Parse(codigos[2])));
                         }
 
                         return Task.FromResult(abrangencias.AsEnumerable());

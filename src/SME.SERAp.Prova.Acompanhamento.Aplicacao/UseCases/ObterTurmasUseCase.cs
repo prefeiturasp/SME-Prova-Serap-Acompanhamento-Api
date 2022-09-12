@@ -17,7 +17,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
         public async Task<IEnumerable<SelecioneDto>> Executar(int anoLetivo, long ueId, Modalidade modalidade, string ano)
         {
-            var turmas = await mediator.Send(new ObterTurmasQuery(anoLetivo, ueId, modalidade, ano));
+            var turmaIds = await mediator.Send(new ObterTurmasUsuarioLogadoQuery());
+            var turmas = await mediator.Send(new ObterTurmasQuery(anoLetivo, ueId, modalidade, ano, turmaIds));
             if (turmas == null && !turmas.Any()) return default;
 
             return turmas.Select(s => new SelecioneDto(s.Id, $"{s.Modalidade} - {s.Nome} - {s.Turno.Descricao()}")).OrderBy(o => o.Descricao);

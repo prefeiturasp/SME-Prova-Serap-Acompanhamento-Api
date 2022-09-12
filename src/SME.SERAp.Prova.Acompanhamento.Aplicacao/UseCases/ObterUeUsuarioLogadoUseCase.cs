@@ -21,7 +21,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
             if (ues == null && !ues.Any()) return default;
 
-            if(modalidade != Modalidade.NaoCadastrado)
+            if (modalidade != Modalidade.NaoCadastrado)
             {
                 var uesIdFiltro = ues.Select(x => x.Id).ToArray();
                 var idsUesPorModalidade = await mediator.Send(new ObterUesIdPorAnoLetivoModalidadeQuery(anoLetivo, modalidade, uesIdFiltro));
