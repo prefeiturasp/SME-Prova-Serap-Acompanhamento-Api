@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
-    public class ObterDresUsuarioLogadoQueryHandler : IRequestHandler<ObterDresUsuarioLogadoQuery, long[]>
+    public class ObterTurmasUsuarioLogadoQueryHandler : IRequestHandler<ObterTurmasUsuarioLogadoQuery, long[]>
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ObterDresUsuarioLogadoQueryHandler(IHttpContextAccessor httpContextAccessor)
+        public ObterTurmasUsuarioLogadoQueryHandler(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
-        public Task<long[]> Handle(ObterDresUsuarioLogadoQuery request, CancellationToken cancellationToken)
+        public Task<long[]> Handle(ObterTurmasUsuarioLogadoQuery request, CancellationToken cancellationToken)
         {
             var grupoId = httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(a => a.Type == "GRUPOID");
             if (grupoId == null) return default;
@@ -29,7 +29,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
             if (dresUesTurmas != null && dresUesTurmas.Any())
                 return Task.FromResult(dresUesTurmas
-                    .Select(t => long.Parse(t.Value.Split("-")[0]))
+                    .Select(t => long.Parse(t.Value.Split("-")[2]))
                     .Where(a => a > 0)
                     .Distinct()
                     .ToArray());

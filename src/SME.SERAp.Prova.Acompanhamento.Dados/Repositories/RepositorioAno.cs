@@ -32,7 +32,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
         public async Task<string[]> ObterUesIdPorAnoLetivoModalidadeAsync(int anoLetivo, Modalidade modalidade, string[] uesId)
         {
             QueryContainer query = new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.AnoLetivo).Value(anoLetivo))
-                && new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.Modalidade).Value(modalidade));
+                && new QueryContainerDescriptor<Ano>().Term(p => p.Field(p => p.Modalidade).Value((int)modalidade));
 
             if (uesId != null && uesId.Any())
             {

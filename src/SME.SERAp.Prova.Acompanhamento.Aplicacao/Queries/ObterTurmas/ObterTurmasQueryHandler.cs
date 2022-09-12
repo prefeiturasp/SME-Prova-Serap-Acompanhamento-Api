@@ -19,7 +19,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
         public async Task<IEnumerable<Turma>> Handle(ObterTurmasQuery request, CancellationToken cancellationToken)
         {
-            return await repositorioTurma.ObterPorUeIdAnoAsync(request.AnoLetivo, request.UeId, request.Modalidade, request.Ano);
+            return await repositorioTurma.ObterPorUeIdAnoAsync(request.AnoLetivo, request.UeId, request.Modalidade, request.Ano, request.TurmaIds);
         }
     }
 }
