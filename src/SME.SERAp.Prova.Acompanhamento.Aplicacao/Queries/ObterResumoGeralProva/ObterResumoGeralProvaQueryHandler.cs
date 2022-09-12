@@ -36,7 +36,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             var resumoGeralProvas = new List<ResumoGeralProvaDto>();
             foreach (var prova in provas)
             {
-                var resumoGeralProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(request.Filtro, long.Parse(prova.Id), request.DresId, request.UesId);
+                var resumoGeralProva = await repositorioProvaTurmaResultado.ObterResumoGeralPorFiltroAsync(request.Filtro, long.Parse(prova.Id), request.DresId, request.UesId, request.TurmasId);
 
                 resumoGeralProva.ProvaId = long.Parse(prova.Id);
                 resumoGeralProva.TituloProva = prova.Descricao;

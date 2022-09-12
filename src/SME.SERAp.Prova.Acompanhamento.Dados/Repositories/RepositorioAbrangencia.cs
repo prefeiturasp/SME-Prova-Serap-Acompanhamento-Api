@@ -18,7 +18,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
         {
             var query =
                 new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.Login).Query(login)) &&
-                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.CoressoId).Query(grupo.ToLower()));
+                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.GrupoId).Query(grupo.ToLower()));
 
             var result = await elasticClient.SearchAsync<Abrangencia>(s => s
                         .Index(IndexName)

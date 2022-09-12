@@ -15,16 +15,26 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
         {
         }
 
-        public async Task<IEnumerable<Turma>> ObterPorUeIdAnoAsync(int anoLetivo, long ueId, Modalidade modalidade, string ano)
+        public async Task<IEnumerable<Turma>> ObterPorUeIdAnoAsync(int anoLetivo, long ueId, Modalidade modalidade, string ano, long[] ids)
         {
-            QueryContainer query = new QueryContainerDescriptor<Turma>();
+            QueryContainer query =
+                new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.AnoLetivo).Value(anoLetivo)) &&
+                new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.UeId).Value(ueId)) &&
+                new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.Ano).Value(ano)) &&
+                new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.Modalidade).Value(modalidade));
 
-            var search = new SearchDescriptor<Turma>(IndexName).Query(q =>
-                q.Term(p => p.Field(p => p.AnoLetivo).Value(anoLetivo)) &&
-                q.Term(p => p.Field(p => p.UeId).Value(ueId)) &&
-                q.Term(p => p.Field(p => p.Ano).Value(ano)) &&
-                q.Term(p => p.Field(p => p.Modalidade).Value(modalidade))
-            ).From(0).Size(10000);
+            if (ids != null && ids.Any())
+            {
+                if (ids[0] > 0)
+                {
+                    QueryContainer queryIds = new QueryContainerDescriptor<Turma>();
+                    foreach (var id in ids)
+                        queryIds = queryIds || new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.Id).Value(id));
+                    query = query && (queryIds);
+                }
+            }
+
+            var search = new SearchDescriptor<Turma>(IndexName).Query(q => query).From(0).Size(10000);
 
             var response = await elasticClient.SearchAsync<Turma>(search);
 
