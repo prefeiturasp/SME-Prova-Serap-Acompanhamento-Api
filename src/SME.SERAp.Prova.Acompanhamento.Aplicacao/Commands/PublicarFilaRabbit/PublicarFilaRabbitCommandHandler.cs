@@ -7,19 +7,17 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using static SME.SERAp.Prova.Acompanhamento.Infra.Services.ServicoLog;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
     public class PublicaFilaRabbitCommandHandler : IRequestHandler<PublicaFilaRabbitCommand, bool>
     {
+        private readonly IModel modelRabbit;
         private readonly IServicoLog servicoLog;
-        private readonly IModel model;
-
-        public PublicaFilaRabbitCommandHandler(IServicoLog servicoLog, IModel model)
+        public PublicaFilaRabbitCommandHandler(IModel modelRabbit, IServicoLog servicoLog)
         {
+            this.modelRabbit = modelRabbit ?? throw new ArgumentNullException(nameof(modelRabbit));
             this.servicoLog = servicoLog ?? throw new ArgumentNullException(nameof(servicoLog));
-            this.model = model ?? throw new ArgumentNullException(nameof(model));
         }
 
         public Task<bool> Handle(PublicaFilaRabbitCommand request, CancellationToken cancellationToken)
@@ -31,18 +29,18 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                 var mensagemJson = JsonSerializer.Serialize(mensagem);
                 var body = Encoding.UTF8.GetBytes(mensagemJson);
 
-                var props = model.CreateBasicProperties();
+                var props = modelRabbit.CreateBasicProperties();
                 props.Persistent = true;
-
-                model.BasicPublish(ExchangeRabbit.SerapEstudanteAcompanhamento, request.NomeRota, props, body);
+                modelRabbit.BasicPublish(ExchangeRabbit.SerapEstudante, request.Fila, props, body);
 
                 return Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                servicoLog.Registrar(LogNivel.Critico, $"Erros: PublicaFilaRabbitCommand --{ex.Message}", $"Worker Serap: Rota -> {request.NomeRota} Fila -> {request.NomeFila}", ex.StackTrace);
+                servicoLog.Registrar(ex);
                 return Task.FromResult(false);
             }
+
         }
     }
 }

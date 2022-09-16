@@ -1,23 +1,32 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using MediatR;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
     public class PublicaFilaRabbitCommand : IRequest<bool>
     {
-        public string NomeFila { get; private set; }
-        public string NomeRota { get; private set; }
-        public object Mensagem { get; private set; }
-
-        public PublicaFilaRabbitCommand(string nomeFila, object mensagem = null)
+        public PublicaFilaRabbitCommand(string fila, object mensagem)
         {
+            Fila = fila;
             Mensagem = mensagem;
-            NomeFila = nomeFila;
-            NomeRota = nomeFila;
+        }
+
+        public string Fila { get; set; }
+        public object Mensagem { get; set; }
+    }
+
+    public class PublicaFilaRabbitCommandValidator : AbstractValidator<PublicaFilaRabbitCommand>
+    {
+        public PublicaFilaRabbitCommandValidator()
+        {
+            RuleFor(c => c.Fila)
+               .NotEmpty()
+               .WithMessage("O nome da fila deve ser informado para publicar na fila do Serap estudantes.");
+
+            RuleFor(c => c.Mensagem)
+               .NotEmpty()
+               .WithMessage("O objeto da mensagem ser informado para publicar na fila do Serap estudantes.");
+
         }
     }
 }
