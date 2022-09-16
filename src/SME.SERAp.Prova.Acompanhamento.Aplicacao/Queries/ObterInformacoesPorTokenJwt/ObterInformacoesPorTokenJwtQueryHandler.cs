@@ -54,9 +54,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                         principal.HasClaim(c => c.Type == "DRE-UE-TURMA"))
                     {
                         var login = principal.Claims.FirstOrDefault(c => c.Type == "LOGIN").Value;
-                        var usuarioId = Guid.Parse(principal.Claims.FirstOrDefault(c => c.Type == "USUARIOID").Value);
+                        var usuarioId = principal.Claims.FirstOrDefault(c => c.Type == "USUARIOID").Value;
                         var usuario = principal.Claims.FirstOrDefault(c => c.Type == "USUARIO").Value;
-                        var grupoId = Guid.Parse(principal.Claims.FirstOrDefault(c => c.Type == "GRUPOID").Value);
+                        var grupoId = principal.Claims.FirstOrDefault(c => c.Type == "GRUPOID").Value;
                         var grupo = principal.Claims.FirstOrDefault(c => c.Type == "GRUPO").Value;
                         var permiteConsultar = bool.Parse(principal.Claims.FirstOrDefault(c => c.Type == "PERMITECONSULTAR").Value);
                         var permiteAlterar = bool.Parse(principal.Claims.FirstOrDefault(c => c.Type == "PERMITEALTERAR").Value);

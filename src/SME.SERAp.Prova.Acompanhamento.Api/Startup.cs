@@ -60,6 +60,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             var conexaoRabbit = factory.CreateConnection();
             IModel channel = conexaoRabbit.CreateModel();
 
+            services.AddSingleton(channel);
+
             var elasticOptions = new ElasticOptions();
             Configuration.GetSection(ElasticOptions.Secao).Bind(elasticOptions, c => c.BindNonPublicProperties = true);
             services.AddSingleton(elasticOptions);

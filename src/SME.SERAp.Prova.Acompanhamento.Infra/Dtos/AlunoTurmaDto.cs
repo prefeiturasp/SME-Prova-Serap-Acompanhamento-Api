@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
+using System;
 
 namespace SME.SERAp.Prova.Acompanhamento.Infra
 {
@@ -25,6 +26,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public DateTime? FimProva { get; set; }
         public long? TempoMedio { get; set; }
         public int? QuestoesRespondidas { get; set; }
+        public string UltimaReabertura { get; set; }
+        public bool PodeReabrirProva { get; set; }
+        public SituacaoProvaAluno? SituacaoProvaAluno {get; set; }
 
         private long? CalcularTempoMedioEmMinutos(long? tempoMedio)
         {
