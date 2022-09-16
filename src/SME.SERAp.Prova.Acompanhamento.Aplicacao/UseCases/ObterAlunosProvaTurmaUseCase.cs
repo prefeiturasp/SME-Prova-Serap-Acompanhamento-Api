@@ -19,10 +19,21 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             var listaAlunosProva = await mediator.Send(new ObterAlunosProvaTurmaQuery(provaId, turmaId));
 
             if (listaAlunosProva == null || !listaAlunosProva.Any()) return default;
+
+            listaAlunosProva = listaAlunosProva.ToList();
+
             if (podeReabrir)
             {
                 foreach (var alunoProva in listaAlunosProva)
+                {
                     alunoProva.PodeReabrirProva = alunoProva.FimProva != null ? true : false;
+                    if (alunoProva.PodeReabrirProva)
+                    {
+                        alunoProva.UltimaReabertura = $"Teste reabertura - {alunoProva.NomeEstudante} + Data:  {DateTime.Now.Date}";
+                    }
+                   
+                }
+                   
             }
 
             return listaAlunosProva.OrderBy(t => t.NomeEstudante);
