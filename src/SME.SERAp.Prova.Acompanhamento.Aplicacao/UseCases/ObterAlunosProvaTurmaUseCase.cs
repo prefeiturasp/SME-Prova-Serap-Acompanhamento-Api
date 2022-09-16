@@ -33,7 +33,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             var claims = await mediator.Send(new ObterAbrangenciaUsuarioLogadoPorClaimsQuery("PERMITEALTERAR"));
             var permiteAlterar = claims.FirstOrDefault(a => a.Chave == "PERMITEALTERAR")?.Valor;
             var prova = await mediator.Send(new ObterProvaPorIdQuery(provaId)); //tratar se prova null 
-            var periodoProva = prova.Inicio >= DateTime.Now.Date && prova.Fim <= DateTime.Now.Date;
+            var periodoProva = prova.Inicio <= DateTime.Now.Date && prova.Fim >= DateTime.Now.Date;
             var podeReabrir = periodoProva && permiteAlterar != null;
             return podeReabrir;
         }
