@@ -10,7 +10,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Enums
     {
         NaoIniciado = 0,
         EmAndamento = 1,
-        Finalizada = 3,
-        Reabrindo = 4
+        Finalizada = 2,
+        Reabrindo = 3
     }
 }
