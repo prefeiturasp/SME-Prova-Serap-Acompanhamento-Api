@@ -23,7 +23,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
         {
             var dados = await repositorioProvaAlunoResultado.ObterPorProvaTurmaAsync(request.ProvaId, request.TurmaId);
             if (dados == null || !dados.Any()) return default;
-            return dados.Select(x => new AlunoTurmaDto(x.AlunoNome, x.AlunoDownload, x.AlunoInicio, x.AlunoFim, x.AlunoTempoMedio, x.AlunoQuestaoRespondida));
+            return dados.Select(x => new AlunoTurmaDto(x.AlunoNome, x.AlunoDownload, x.AlunoRa, x.AlunoInicio, x.AlunoFim, x.AlunoTempoMedio, x.AlunoQuestaoRespondida));
         }
     }
 }
