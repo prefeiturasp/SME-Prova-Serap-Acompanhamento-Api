@@ -16,15 +16,25 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
         public async Task<IEnumerable<Abrangencia>> ObterPorLoginGrupoAsync(string login, string grupo)
         {
-            var query =
-                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.Login).Query(login)) &&
-                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.GrupoId).Query(grupo.ToLower()));
+            try
+            {
+                var query =
+               new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.Login).Query(login)) &&
+               new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(p => p.GrupoId).Query(grupo.ToLower()));
 
-            var result = await elasticClient.SearchAsync<Abrangencia>(s => s
-                        .Index(IndexName)
-                        .Query(_ => query));
+                var result = await elasticClient.SearchAsync<Abrangencia>(s => s
+                            .Index(IndexName)
+                            .Query(_ => query));
 
-            return result?.Documents.ToList();
+                return result?.Documents.ToList();
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
+            
+           
         }
     }
 }
