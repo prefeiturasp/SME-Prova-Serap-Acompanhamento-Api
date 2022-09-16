@@ -10,7 +10,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
 
         }
 
-        public AlunoTurmaDto(string nomeEstudante, bool fezDownload, long ra, DateTime? inicioProva, DateTime? fimProva, long? tempoMedio, int? questoesRespondidas)
+        public AlunoTurmaDto(string nomeEstudante, bool fezDownload, long ra, DateTime? inicioProva, DateTime? fimProva, long? tempoMedio, int? questoesRespondidas, SituacaoProvaAluno? situacaoProvaAluno)
         {
             NomeEstudante = nomeEstudante;
             FezDownload = fezDownload;
@@ -19,6 +19,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
             TempoMedio = CalcularTempoMedioEmMinutos(tempoMedio);
             QuestoesRespondidas = questoesRespondidas;
             Ra = ra;
+            SituacaoProvaAluno = situacaoProvaAluno;
 
         }
 
