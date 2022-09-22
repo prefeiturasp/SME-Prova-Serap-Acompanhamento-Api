@@ -28,5 +28,20 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             return result?.Documents.ToList();
         }
+
+
+        public async Task<Abrangencia> ObterPorUsuarioCoressoAsync(string UsuarioCoressoId)
+        {
+            UsuarioCoressoId = UsuarioCoressoId.ToLower();
+
+            var query =
+                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(f => f.UsuarioId).Query(UsuarioCoressoId));
+
+            var result = await elasticClient.SearchAsync<Abrangencia>(s => s
+                        .Index(IndexName)
+                        .Query(_ => query));
+
+            return result?.Documents.ToList().FirstOrDefault();
+        }
     }
 }
