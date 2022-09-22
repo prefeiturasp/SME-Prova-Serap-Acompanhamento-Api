@@ -12,11 +12,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 {
     public class PublicaFilaRabbitCommandHandler : IRequestHandler<PublicaFilaRabbitCommand, bool>
     {
-        private readonly IModel modelRabbit;
+        private readonly IConnection connectionRabbit;
         private readonly IServicoLog servicoLog;
-        public PublicaFilaRabbitCommandHandler(IModel modelRabbit, IServicoLog servicoLog)
+        public PublicaFilaRabbitCommandHandler(IConnection connectionRabbit, IServicoLog servicoLog)
         {
-            this.modelRabbit = modelRabbit ?? throw new ArgumentNullException(nameof(modelRabbit));
+            this.connectionRabbit = connectionRabbit ?? throw new ArgumentNullException(nameof(connectionRabbit));
             this.servicoLog = servicoLog ?? throw new ArgumentNullException(nameof(servicoLog));
         }
 
@@ -29,9 +29,14 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                 var mensagemJson = JsonSerializer.Serialize(mensagem);
                 var body = Encoding.UTF8.GetBytes(mensagemJson);
 
-                var props = modelRabbit.CreateBasicProperties();
-                props.Persistent = true;
-                modelRabbit.BasicPublish(ExchangeRabbit.SerapEstudante, request.Fila, props, body);
+                using (IModel canal = connectionRabbit.CreateModel())
+                {
+                    var props = canal.CreateBasicProperties();
+                    props.Persistent = true;
+                    canal.BasicPublish(ExchangeRabbit.SerapEstudante, request.Fila, props, body);
+                }
+
+         
 
                 return Task.FromResult(true);
             }

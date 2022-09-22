@@ -22,21 +22,24 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
             listaAlunosProva = listaAlunosProva.ToList();
 
-            if (podeReabrir)
+            foreach (var alunoProva in listaAlunosProva)
             {
-                foreach (var alunoProva in listaAlunosProva)
-                {
-                    alunoProva.PodeReabrirProva = alunoProva.FimProva != null ? true : false;
-                    if (alunoProva.PodeReabrirProva)
-                    {
-                        alunoProva.UltimaReabertura = $"Teste reabertura - {alunoProva.NomeEstudante} + Data:  {DateTime.Now.Date}";
-                    }
-                   
-                }
-                   
+                alunoProva.UltimaReabertura = await VerificaInformacaoUltimaReabertura(alunoProva);
+                alunoProva.PodeReabrirProva = alunoProva.FimProva != null && podeReabrir ? true : false;
+
+            }
+            return listaAlunosProva.OrderBy(t => t.NomeEstudante);
+        }
+
+        private async Task<string> VerificaInformacaoUltimaReabertura(AlunoTurmaDto alunoProva)
+        {
+            if (alunoProva.UsurioCoressoUltimaReabertura != null)
+            {
+                var abrangencia = await mediator.Send(new ObterNomeUsuarioPorIdCoressoQuery(alunoProva.UsurioCoressoUltimaReabertura));
+              return  $"{abrangencia.Usuario} -  {alunoProva.DataUltimaReabertura}";
             }
 
-            return listaAlunosProva.OrderBy(t => t.NomeEstudante);
+            return string.Empty;
         }
 
         private async Task<bool> VerificaSeProvaPodeSerReaberta(long provaId)

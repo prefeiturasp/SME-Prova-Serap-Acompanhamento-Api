@@ -56,11 +56,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             };
 
             services.AddSingleton(factory);
-
+            
             var conexaoRabbit = factory.CreateConnection();
+            services.AddSingleton(conexaoRabbit);
+
             IModel channel = conexaoRabbit.CreateModel();
 
-            services.AddSingleton(channel);
 
             var elasticOptions = new ElasticOptions();
             Configuration.GetSection(ElasticOptions.Secao).Bind(elasticOptions, c => c.BindNonPublicProperties = true);
