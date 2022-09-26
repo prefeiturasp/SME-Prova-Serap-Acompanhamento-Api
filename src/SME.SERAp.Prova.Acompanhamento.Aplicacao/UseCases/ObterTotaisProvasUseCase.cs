@@ -18,7 +18,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             this.repositorioProvaTurmaResultado = repositorioProvaTurmaResultado ?? throw new ArgumentNullException(nameof(repositorioProvaTurmaResultado));
         }
 
-        public async Task<List<TotalDto>> Executar(FiltroDto filtro)
+        public async Task<TotalProvasDto> Executar(FiltroDto filtro)
         {
             var dresId = await mediator.Send(new ObterDresUsuarioLogadoQuery());
             var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
@@ -42,7 +42,58 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             var percentualRealizado = totalFinalizadas > 0 ? (totalFinalizadas * 100) / totalProvas : 0;
             listaTotais.Add(new TotalDto("Percentual Realizado", "#1B80D4", $"{percentualRealizado:N2}%"));
 
-            return listaTotais;
+            var resumoGeral = await mediator.Send(new ObterResumoGeralProvaQuery(filtro, dresId, uesId, turmasId, filtro.NumeroPagina, filtro.NumeroRegistros));
+
+            var graficos = new GraficosDto();
+
+            graficos.TotalProvasVsIniciadas = new List<TotalProvasVsIniciadasDto>();
+            graficos.TotalProvasVsFinalizadas = new List<TotalProvasVsFinalizadasDto>();
+            graficos.QuestoesPrevistasVsQuestoesRespondidas = new List<QuestoesPrevistasVsQuestoesRespondidasDto>();
+            graficos.TempoMedio = new List<TempoMedioDto>();
+
+            foreach (var provaResumo in resumoGeral.Items)
+            {
+                var totalIniciada = new TotalProvasVsIniciadasDto
+                {
+                    ProvaDescricao = provaResumo.TituloProva,
+                    TotalProvas = provaResumo.TotalAlunos,
+                    TotalProvasIniciadas = provaResumo.ProvasIniciadas
+                };
+
+                graficos.TotalProvasVsIniciadas.Add(totalIniciada);
+
+                var totalFinalizada = new TotalProvasVsFinalizadasDto()
+                {
+                    ProvaDescricao = provaResumo.TituloProva,
+                    TotalProvas = provaResumo.TotalAlunos,
+                    TotalProvasFinalizadas = provaResumo.ProvasFinalizadas
+                };
+
+                graficos.TotalProvasVsFinalizadas.Add(totalFinalizada);
+
+                var questoesPrevistasVsRespondidads = new QuestoesPrevistasVsQuestoesRespondidasDto()
+                {
+                    ProvaDescricao = provaResumo.TituloProva,
+                    TotalQuestoesPrevistas = provaResumo.DetalheProva.QtdeQuestoesProva,
+                    TotalQuestoesRespondidas = provaResumo.DetalheProva.Respondidas
+                };
+
+                graficos.QuestoesPrevistasVsQuestoesRespondidas.Add(questoesPrevistasVsRespondidads);
+
+                var tempoMedio = new TempoMedioDto()
+                {
+                    ProvaDescricao = provaResumo.TituloProva,
+                    TempoMedioMinutos = provaResumo.TempoMedio
+                };
+
+                graficos.TempoMedio.Add(tempoMedio);
+            }
+
+            var TotaisProvas = new TotalProvasDto();
+            TotaisProvas.Totais = listaTotais;
+            TotaisProvas.Graficos = graficos;
+           
+            return TotaisProvas;
         }
     }
 }
