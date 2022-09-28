@@ -26,7 +26,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
 
         }
 
-        public long Ra { get; set;  }
+        public long Ra { get; set; }
         public string NomeEstudante { get; set; }
         public bool FezDownload { get; set; }
         public DateTime? InicioProva { get; set; }
@@ -35,7 +35,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public int? QuestoesRespondidas { get; set; }
         public string UltimaReabertura { get; set; }
         public bool PodeReabrirProva { get; set; }
-        public SituacaoProvaAluno? SituacaoProvaAluno {get; set; }
+        public SituacaoProvaAluno? SituacaoProvaAluno { get; set; }
         public string UsurioCoressoUltimaReabertura { get; set; }
 
         public DateTime? DataUltimaReabertura { get; set; }
