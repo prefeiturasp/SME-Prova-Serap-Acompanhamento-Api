@@ -3,7 +3,7 @@
 
 namespace SME.SERAp.Prova.Acompanhamento.Infra.Dtos
 {
-   public class ProvaAlunoReaberturaDto
+    public class ProvaAlunoReaberturaDto
     {
         public long ProvaId { get; set; }
         public long AlunoRA { get; set; }
