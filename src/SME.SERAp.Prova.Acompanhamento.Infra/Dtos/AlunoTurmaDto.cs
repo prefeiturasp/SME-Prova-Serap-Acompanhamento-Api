@@ -10,7 +10,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
 
         }
 
-        public AlunoTurmaDto(string nomeEstudante, bool fezDownload, long ra, DateTime? inicioProva, DateTime? fimProva, long? tempoMedio, int? questoesRespondidas, SituacaoProvaAluno? situacaoProvaAluno, string usurioCoressoUltimaReabertura, DateTime? dataUltimaReabertura)
+        public AlunoTurmaDto(string nomeEstudante, bool fezDownload, long ra, DateTime? inicioProva, DateTime? fimProva, long? tempoMedio, int? questoesRespondidas, string usurioCoressoUltimaReabertura, DateTime? dataUltimaReabertura, SituacaoProvaAluno? situacaoProvaAluno)
         {
             NomeEstudante = nomeEstudante;
             FezDownload = fezDownload;
