@@ -25,13 +25,22 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             foreach (var alunoProva in listaAlunosProva)
             {
                 alunoProva.UltimaReabertura = await VerificaInformacaoUltimaReabertura(alunoProva);
-                alunoProva.PodeReabrirProva = provaPodeSerReaberta && 
-                                              (alunoProva.FimProva != null &&
-                                              (alunoProva.SituacaoProvaAluno == Dominio.Enums.SituacaoProvaAluno.Finalizada || alunoProva.SituacaoProvaAluno == null)) 
-                                              ? true : false;
+
+                alunoProva.PodeReabrirProva = alunoPodeterAProvaReaberta(provaPodeSerReaberta, alunoProva);
 
             }
             return listaAlunosProva.OrderBy(t => t.NomeEstudante);
+        }
+
+        private bool alunoPodeterAProvaReaberta(bool provaPodeSerReaberta, AlunoTurmaDto alunoProva)
+        {
+            if (provaPodeSerReaberta && alunoProva.SituacaoProvaAluno != Dominio.Enums.SituacaoProvaAluno.Reabrindo)
+            {
+                return (alunoProva.FimProva != null && alunoProva.SituacaoProvaAluno == null) ||
+                                                alunoProva.SituacaoProvaAluno == Dominio.Enums.SituacaoProvaAluno.Finalizada ? true : false;
+            }
+
+            return false;
         }
 
         private async Task<string> VerificaInformacaoUltimaReabertura(AlunoTurmaDto alunoProva)
