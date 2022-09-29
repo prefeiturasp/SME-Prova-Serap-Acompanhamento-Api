@@ -15,7 +15,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
         public async Task<IEnumerable<AlunoTurmaDto>> Executar(long provaId, long turmaId)
         {
-            bool podeReabrir = await VerificaSeProvaPodeSerReaberta(provaId);
+            bool provaPodeSerReaberta = await VerificaSeProvaPodeSerReaberta(provaId);
             var listaAlunosProva = await mediator.Send(new ObterAlunosProvaTurmaQuery(provaId, turmaId));
 
             if (listaAlunosProva == null || !listaAlunosProva.Any()) return default;
@@ -25,7 +25,10 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             foreach (var alunoProva in listaAlunosProva)
             {
                 alunoProva.UltimaReabertura = await VerificaInformacaoUltimaReabertura(alunoProva);
-                alunoProva.PodeReabrirProva = alunoProva.FimProva != null && podeReabrir ? true : false;
+                alunoProva.PodeReabrirProva = provaPodeSerReaberta && 
+                                              (alunoProva.FimProva != null &&
+                                              (alunoProva.SituacaoProvaAluno == Dominio.Enums.SituacaoProvaAluno.Finalizada || alunoProva.SituacaoProvaAluno == null)) 
+                                              ? true : false;
 
             }
             return listaAlunosProva.OrderBy(t => t.NomeEstudante);
