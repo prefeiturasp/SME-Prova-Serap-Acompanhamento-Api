@@ -28,7 +28,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
             foreach (var resultado in provaAlunoResultados)
             {
-                resultado.Situacao = SituacaoProvaAluno.Reabrindo;
+                resultado.SituacaoProvaAluno = SituacaoProvaAluno.Reabrindo;
                 await mediator.Send(new AlterarProvaAlunoResultadoCommand(resultado));
             }
 

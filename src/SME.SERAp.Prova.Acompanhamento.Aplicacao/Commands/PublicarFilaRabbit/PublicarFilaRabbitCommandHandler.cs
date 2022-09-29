@@ -36,7 +36,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                     canal.BasicPublish(ExchangeRabbit.SerapEstudante, request.Fila, props, body);
                 }
 
-         
+
 
                 return Task.FromResult(true);
             }

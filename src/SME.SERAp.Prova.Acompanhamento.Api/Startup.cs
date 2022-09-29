@@ -56,7 +56,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             };
 
             services.AddSingleton(factory);
-            
+
             var conexaoRabbit = factory.CreateConnection();
             services.AddSingleton(conexaoRabbit);
 
