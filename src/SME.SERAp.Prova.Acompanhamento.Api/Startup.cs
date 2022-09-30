@@ -156,6 +156,11 @@ namespace SME.SERAp.Prova.Acompanhamento.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapSwagger("/swagger/{documentName}/swagger.json", options =>
+                {
+                    options.PreSerializeFilters.Add((swagger, httpRequest) => { });
+                });
             });
         }
     }
