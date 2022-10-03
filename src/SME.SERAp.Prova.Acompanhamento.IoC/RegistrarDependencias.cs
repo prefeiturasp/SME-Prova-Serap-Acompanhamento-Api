@@ -60,6 +60,7 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
             services.AddScoped<IObterTotaisProvasUseCase, ObterTotaisProvasUseCase>();
             services.AddScoped<IObterResumoGeralProvasUseCase, ObterResumoGeralProvasUseCase>();
             services.AddScoped<IReabrirProvaAlunoUseCase, ReabrirProvaAlunoUseCase>();
+            services.AddScoped<IObterGraficosUseCase, ObterGraficosUseCase>();
         }
     }
 }
