@@ -29,9 +29,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio
             AlunoQuestaoRespondida = alunoQuestaoRespondida;
             UsuarioIdReabertura = usuarioIdReabertura;
             DataHoraReabertura = dataHoraReabertura;
-        
 
-        Id = Guid.NewGuid().ToString();
+
+            Id = Guid.NewGuid().ToString();
         }
 
         public long ProvaId { get; set; }

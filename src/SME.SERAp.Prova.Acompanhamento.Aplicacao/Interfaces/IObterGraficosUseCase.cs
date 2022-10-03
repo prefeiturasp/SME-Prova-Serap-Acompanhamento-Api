@@ -1,11 +1,10 @@
 ﻿using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces
 {
-    public interface IObterTotaisProvasUseCase
+    public interface IObterGraficosUseCase
     {
-        Task<List<TotalDto>> Executar(FiltroDto filtro);
+        Task<GraficosDto> Executar(FiltroDto filtro);
     }
 }

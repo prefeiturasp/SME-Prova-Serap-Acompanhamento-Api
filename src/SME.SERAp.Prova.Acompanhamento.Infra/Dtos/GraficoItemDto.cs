@@ -3,7 +3,7 @@
     public class GraficoItemDto
     {
         public string Descricao { get; set; }
-        public long ValorX { get; set; }
-        public long ValorY { get; set; }
+        public string Tipo { get; set; }
+        public long Valor { get; set; }
     }
 }
