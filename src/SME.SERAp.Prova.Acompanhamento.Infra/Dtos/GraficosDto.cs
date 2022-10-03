@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SME.SERAp.Prova.Acompanhamento.Infra.Dtos
 {
-   public  class GraficosDto
+    public  class GraficosDto
     {
-        public List<TotalProvasVsIniciadasDto> TotalProvasVsIniciadas { get; set; }
-        public List<TotalProvasVsFinalizadasDto> TotalProvasVsFinalizadas { get; set; }
+        public List<GraficoItemDto> TotalProvasVsIniciadas { get; set; }
+        public List<GraficoItemDto> TotalProvasVsFinalizadas { get; set; }
 
-        public List<QuestoesPrevistasVsQuestoesRespondidasDto> QuestoesPrevistasVsQuestoesRespondidas { get; set;  }
+        public List<GraficoItemDto> QuestoesPrevistasVsQuestoesRespondidas { get; set;  }
 
-        public List<TempoMedioDto> TempoMedio { get; set; }
+        public List<GraficoItemDto> ProvaVSTempoMedio { get; set; }
 
     }
 }

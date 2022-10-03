@@ -46,47 +46,47 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
             var graficos = new GraficosDto();
 
-            graficos.TotalProvasVsIniciadas = new List<TotalProvasVsIniciadasDto>();
-            graficos.TotalProvasVsFinalizadas = new List<TotalProvasVsFinalizadasDto>();
-            graficos.QuestoesPrevistasVsQuestoesRespondidas = new List<QuestoesPrevistasVsQuestoesRespondidasDto>();
-            graficos.TempoMedio = new List<TempoMedioDto>();
+            graficos.TotalProvasVsIniciadas = new List<GraficoItemDto>();
+            graficos.TotalProvasVsFinalizadas = new List<GraficoItemDto>();
+            graficos.QuestoesPrevistasVsQuestoesRespondidas = new List<GraficoItemDto>();
+            graficos.ProvaVSTempoMedio = new List<GraficoItemDto>();
 
             foreach (var provaResumo in resumoGeral.Items)
             {
-                var totalIniciada = new TotalProvasVsIniciadasDto
+                var totalIniciada = new GraficoItemDto
                 {
-                    ProvaDescricao = provaResumo.TituloProva,
-                    TotalProvas = provaResumo.TotalAlunos,
-                    TotalProvasIniciadas = provaResumo.ProvasIniciadas
+                    Descricao = provaResumo.TituloProva,
+                    ValorX = provaResumo.TotalAlunos,
+                    ValorY = provaResumo.ProvasIniciadas + provaResumo.ProvasNaoFinalizadas + provaResumo.ProvasFinalizadas
                 };
 
                 graficos.TotalProvasVsIniciadas.Add(totalIniciada);
 
-                var totalFinalizada = new TotalProvasVsFinalizadasDto()
+                var totalFinalizada = new GraficoItemDto()
                 {
-                    ProvaDescricao = provaResumo.TituloProva,
-                    TotalProvas = provaResumo.TotalAlunos,
-                    TotalProvasFinalizadas = provaResumo.ProvasFinalizadas
+                    Descricao = provaResumo.TituloProva,
+                    ValorX = provaResumo.TotalAlunos,
+                    ValorY = provaResumo.ProvasFinalizadas
                 };
 
                 graficos.TotalProvasVsFinalizadas.Add(totalFinalizada);
 
-                var questoesPrevistasVsRespondidads = new QuestoesPrevistasVsQuestoesRespondidasDto()
+                var questoesPrevistasVsRespondidads = new GraficoItemDto()
                 {
-                    ProvaDescricao = provaResumo.TituloProva,
-                    TotalQuestoesPrevistas = provaResumo.DetalheProva.QtdeQuestoesProva,
-                    TotalQuestoesRespondidas = provaResumo.DetalheProva.Respondidas
+                    Descricao = provaResumo.TituloProva,
+                    ValorX = provaResumo.DetalheProva.QtdeQuestoesProva,
+                    ValorY = Convert.ToInt64(provaResumo.DetalheProva.Respondidas)
                 };
 
                 graficos.QuestoesPrevistasVsQuestoesRespondidas.Add(questoesPrevistasVsRespondidads);
 
-                var tempoMedio = new TempoMedioDto()
+                var tempoMedio = new GraficoItemDto()
                 {
-                    ProvaDescricao = provaResumo.TituloProva,
-                    TempoMedioMinutos = provaResumo.TempoMedio
+                    Descricao = provaResumo.TituloProva,
+                    ValorX = provaResumo.TempoMedio
                 };
 
-                graficos.TempoMedio.Add(tempoMedio);
+                graficos.ProvaVSTempoMedio.Add(tempoMedio);
             }
 
             var TotaisProvas = new TotalProvasDto();
