@@ -56,7 +56,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                 {
                     Descricao = provaResumo.TituloProva,
                     Tipo = "Questões Previstas",
-                    Valor = provaResumo.DetalheProva.QtdeQuestoesProva,
+                    Valor = Convert.ToInt64(provaResumo.DetalheProva.TotalQuestoes),
                 });
                 graficos.QuestoesPrevistasVsQuestoesRespondidas.Add(new GraficoItemDto()
                 {
