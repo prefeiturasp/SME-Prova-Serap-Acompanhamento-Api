@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
+﻿namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
 {
     public class Abrangencia : EntidadeBase
     {
