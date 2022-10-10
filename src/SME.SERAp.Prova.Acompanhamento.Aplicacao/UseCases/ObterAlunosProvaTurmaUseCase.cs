@@ -15,7 +15,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
         public async Task<IEnumerable<AlunoTurmaDto>> Executar(long provaId, long turmaId)
         {
-            bool podeReabrir = await VerificaSeProvaPodeSerReaberta(provaId);
+            bool provaPodeSerReaberta = await VerificaSeProvaPodeSerReaberta(provaId);
             var listaAlunosProva = await mediator.Send(new ObterAlunosProvaTurmaQuery(provaId, turmaId));
 
             if (listaAlunosProva == null || !listaAlunosProva.Any()) return default;
@@ -25,10 +25,22 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             foreach (var alunoProva in listaAlunosProva)
             {
                 alunoProva.UltimaReabertura = await VerificaInformacaoUltimaReabertura(alunoProva);
-                alunoProva.PodeReabrirProva = alunoProva.FimProva != null && podeReabrir ? true : false;
+
+                alunoProva.PodeReabrirProva = alunoPodeterAProvaReaberta(provaPodeSerReaberta, alunoProva);
 
             }
             return listaAlunosProva.OrderBy(t => t.NomeEstudante);
+        }
+
+        private bool alunoPodeterAProvaReaberta(bool provaPodeSerReaberta, AlunoTurmaDto alunoProva)
+        {
+            if (provaPodeSerReaberta && alunoProva.SituacaoProvaAluno != Dominio.Enums.SituacaoProvaAluno.Reabrindo)
+            {
+                return (alunoProva.FimProva != null && alunoProva.SituacaoProvaAluno == null) ||
+                                                alunoProva.SituacaoProvaAluno == Dominio.Enums.SituacaoProvaAluno.Finalizada ? true : false;
+            }
+
+            return false;
         }
 
         private async Task<string> VerificaInformacaoUltimaReabertura(AlunoTurmaDto alunoProva)
@@ -36,7 +48,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             if (alunoProva.UsurioCoressoUltimaReabertura != null)
             {
                 var abrangencia = await mediator.Send(new ObterNomeUsuarioPorIdCoressoQuery(alunoProva.UsurioCoressoUltimaReabertura));
-              return  $"{abrangencia.Usuario} -  {alunoProva.DataUltimaReabertura}";
+                return $"{abrangencia.Usuario} -  {alunoProva.DataUltimaReabertura}";
             }
 
             return string.Empty;

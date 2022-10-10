@@ -4,7 +4,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
 {
     public class Turma : EntidadeBase
     {
-        public Turma(long id, long ueId, long codigo, int anoLetivo, string ano, string nome, Modalidade modalidade, Turno turno, int etapaEja, string serieEnsino)
+        public Turma(long id, long ueId, long codigo, int anoLetivo, string ano, string nome, Modalidade modalidade, Turno turno, int etapaEja, string serieEnsino, string semestre)
         {
             Id = id.ToString();
             UeId = ueId;
@@ -16,6 +16,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
             Turno = turno;
             EtapaEja = etapaEja;
             SerieEnsino = serieEnsino;
+            Semestre = semestre;
         }
 
         public long UeId { get; set; }
@@ -27,5 +28,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
         public Turno Turno { get; set; }
         public int EtapaEja { get; set; }
         public string SerieEnsino { get; set; }
+        public string Semestre { get; set; }
     }
 }
