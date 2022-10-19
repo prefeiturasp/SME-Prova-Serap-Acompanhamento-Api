@@ -1,6 +1,7 @@
 ﻿using Nest;
 using SME.SERAp.Prova.Acompanhamento.Dados.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
+using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,18 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados
     public abstract class RepositorioBase<TEntidade> : IRepositorioBase<TEntidade> where TEntidade : EntidadeBase
     {
         protected readonly IElasticClient elasticClient;
+        protected readonly string IndexName;
 
-        protected abstract string IndexName { get; }
-
-        public RepositorioBase(IElasticClient elasticClient)
+        public RepositorioBase(ElasticOptions elasticOptions, IElasticClient elasticClient)
         {
             this.elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
+            if (elasticOptions == null) throw new ArgumentNullException(nameof(elasticOptions));
+
+            if (!string.IsNullOrEmpty(elasticOptions.PrefixIndex))
+                IndexName = $"{elasticOptions.PrefixIndex}-";
+
+            IndexName = (IndexName + typeof(TEntidade).Name).ToLower();
+
             _ = CriarIndexAsync().Result;
         }
 

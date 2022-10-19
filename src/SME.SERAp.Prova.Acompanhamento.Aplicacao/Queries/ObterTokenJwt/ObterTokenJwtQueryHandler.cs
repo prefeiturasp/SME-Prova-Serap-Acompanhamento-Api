@@ -27,9 +27,12 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             var claims = new List<Claim>
             {
                 new Claim("LOGIN", request.Abrangencias.FirstOrDefault().Login),
+                new Claim("USUARIOID", request.Abrangencias.FirstOrDefault().UsuarioId.ToString()),
                 new Claim("USUARIO", request.Abrangencias.FirstOrDefault().Usuario),
-                new Claim("CORESSOID", request.Abrangencias.FirstOrDefault().CoressoId),
-                new Claim("GRUPO", request.Abrangencias.FirstOrDefault().Grupo)
+                new Claim("GRUPOID", request.Abrangencias.FirstOrDefault().GrupoId.ToString()),
+                new Claim("GRUPO", request.Abrangencias.FirstOrDefault().Grupo),
+                new Claim("PERMITECONSULTAR", request.Abrangencias.FirstOrDefault().PermiteConsultar.ToString()),
+                new Claim("PERMITEALTERAR", request.Abrangencias.FirstOrDefault().PermiteAlterar.ToString())
             };
 
             foreach (var abrangencia in request.Abrangencias)

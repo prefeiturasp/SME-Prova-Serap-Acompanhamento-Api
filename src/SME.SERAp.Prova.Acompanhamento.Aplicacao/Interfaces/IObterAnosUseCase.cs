@@ -7,6 +7,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces
 {
     public interface IObterAnosUseCase
     {
-        Task<IEnumerable<SelecioneDto>> Executar(int anoLetivo, Modalidade modalidade, long euId);
+        Task<IEnumerable<SelecioneDto>> Executar(int anoLetivo, Modalidade modalidade, long ueId);
     }
 }

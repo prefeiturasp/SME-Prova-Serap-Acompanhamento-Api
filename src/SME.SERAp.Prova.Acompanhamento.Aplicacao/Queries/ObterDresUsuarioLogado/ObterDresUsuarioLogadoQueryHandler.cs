@@ -19,10 +19,10 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
 
         public Task<long[]> Handle(ObterDresUsuarioLogadoQuery request, CancellationToken cancellationToken)
         {
-            var coressoid = httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(a => a.Type == "CORESSOID");
-            if (coressoid == null) return default;
+            var grupoId = httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(a => a.Type == "GRUPOID");
+            if (grupoId == null) return default;
 
-            if (Perfis.PerfilEhAdministrador(coressoid.Value))
+            if (Perfis.PerfilEhAdministrador(grupoId.Value))
                 return Task.FromResult(Array.Empty<long>());
 
             var dresUesTurmas = httpContextAccessor.HttpContext?.User?.Claims?.Where(a => a.Type == "DRE-UE-TURMA").ToList();
@@ -31,6 +31,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
                 return Task.FromResult(dresUesTurmas
                     .Select(t => long.Parse(t.Value.Split("-")[0]))
                     .Where(a => a > 0)
+                    .Distinct()
                     .ToArray());
 
             return default;

@@ -19,7 +19,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
         {
             return Ok(await obterTotaisProvasUseCase.Executar(filtro));
         }
+
+        [HttpGet("graficos")]
+        [ProducesResponseType(typeof(GraficosDto), 200)]
+        [ProducesResponseType(typeof(RetornoBaseDto), 500)]
+        public async Task<IActionResult> ObterGraficos([FromQuery] FiltroDto filtro, [FromServices] IObterGraficosUseCase obterGraficosUseCase)
+        {
+            return Ok(await obterGraficosUseCase.Executar(filtro));
+        }
     }
 }
-
-

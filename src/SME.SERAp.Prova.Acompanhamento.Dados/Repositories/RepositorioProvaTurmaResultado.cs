@@ -4,6 +4,7 @@ using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Dominio.Enums;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
+using SME.SERAp.Prova.Acompanhamento.Infra.EnvironmentVariables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 {
     public class RepositorioProvaTurmaResultado : RepositorioBase<ProvaTurmaResultado>, IRepositorioProvaTurmaResultado
     {
-        protected override string IndexName => "prova-turma-resultado";
-        public RepositorioProvaTurmaResultado(IElasticClient elasticClient) : base(elasticClient) { }
-
-        private static QueryContainer MontarQueryFiltro(FiltroDto filtro, long[] dresId, long[] uesId)
+        public RepositorioProvaTurmaResultado(ElasticOptions elasticOptions, IElasticClient elasticClient) : base(elasticOptions, elasticClient)
         {
-            var now = DateTime.Now.ToString("yyyy-MM-ddT00:00:00.000'Z'");
+        }
+
+        private static QueryContainer MontarQueryFiltro(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
+        {
+            var now = DateTime.Now;
 
             QueryContainer query = new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.AnoLetivo).Value(filtro.AnoLetivo));
 
@@ -40,6 +42,16 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     queryUes = queryUes || new QueryContainerDescriptor<ProvaTurmaResultado>().Term(d => d.Field(f => f.UeId).Value(id));
 
                 query = query && (queryUes);
+            }
+
+            if (turmasId != null && turmasId.Any())
+            {
+                QueryContainer queryTurmas = new QueryContainerDescriptor<ProvaTurmaResultado>();
+
+                foreach (var id in turmasId)
+                    queryTurmas = queryTurmas || new QueryContainerDescriptor<ProvaTurmaResultado>().Term(d => d.Field(f => f.TurmaId).Value(id));
+
+                query = query && (queryTurmas);
             }
 
             if (filtro.ProvaSituacao == ProvaSituacao.EmAndamento)
@@ -78,13 +90,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             return query;
         }
 
-        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorFiltroAsync(FiltroDto filtro, long provaId, long[] dresId, long[] uesId)
+        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorFiltroAsync(FiltroDto filtro, long provaId, long[] dresId, long[] uesId, long[] turmasId)
         {
-            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId);
+            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId, turmasId);
 
             query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
 
-            var resultado = new List<ProvaTurmaResultado>();                        
+            var resultado = new List<ProvaTurmaResultado>();
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(_ => query)
@@ -135,9 +147,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             return responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
         }
 
-        public async Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId)
+        public async Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
         {
-            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId);
+            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId, turmasId);
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
            .Query(_ => query).Size(0)
@@ -149,9 +161,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             return response.Aggregations.ValueCount("TotalProvas").Value.GetValueOrDefault();
         }
 
-        public async Task<double> ObterTotalProvasIniciadasHojePorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId)
+        public async Task<double> ObterTotalProvasIniciadasHojePorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
         {
-            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId);
+            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId, turmasId);
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
            .Query(_ => query).Size(0)
@@ -163,9 +175,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             return response.Aggregations.ValueCount("TotalIniciadas").Value.GetValueOrDefault();
         }
 
-        public async Task<double> ObterTotalProvasNaoFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId)
+        public async Task<double> ObterTotalProvasNaoFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
         {
-            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId);
+            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId, turmasId);
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
            .Query(_ => query).Size(0)
@@ -177,9 +189,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             return response.Aggregations.ValueCount("TotalNaoFinalizado").Value.GetValueOrDefault();
         }
 
-        public async Task<double> ObterTotalProvasFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId)
+        public async Task<double> ObterTotalProvasFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
         {
-            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId);
+            QueryContainer query = MontarQueryFiltro(filtro, dresId, uesId, turmasId);
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
            .Query(_ => query).Size(0)

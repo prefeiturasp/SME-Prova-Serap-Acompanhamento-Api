@@ -7,5 +7,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
     public interface IRepositorioAbrangencia : IRepositorioBase<Abrangencia>
     {
         Task<IEnumerable<Abrangencia>> ObterPorLoginGrupoAsync(string login, string grupo);
+        Task<Abrangencia> ObterPorUsuarioCoressoAsync(string UsuarioCoressoId);
     }
 }
