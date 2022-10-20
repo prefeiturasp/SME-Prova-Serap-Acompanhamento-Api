@@ -48,7 +48,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             if (alunoProva.UsurioCoressoUltimaReabertura != null)
             {
                 var abrangencia = await mediator.Send(new ObterNomeUsuarioPorIdCoressoQuery(alunoProva.UsurioCoressoUltimaReabertura));
-                return $"{abrangencia.Usuario} -  {alunoProva.DataUltimaReabertura}";
+
+                if(abrangencia != null)
+                    return $"{abrangencia.Usuario} -  {alunoProva.DataUltimaReabertura}";
             }
 
             return string.Empty;
