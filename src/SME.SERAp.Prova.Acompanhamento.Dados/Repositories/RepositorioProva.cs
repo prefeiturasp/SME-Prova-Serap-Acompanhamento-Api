@@ -19,7 +19,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
         {
             QueryContainer query = new QueryContainerDescriptor<Dominio.Entities.Prova>().Term(p => p.Field(p => p.Ano).Value(anoLetivo));
 
-            var now = DateTime.Now;
+            var now = DateTime.Now.ToString("yyyy-MM-ddT00:00:00.000'Z'");
             if (provaSituacao != ProvaSituacao.NaoCadastrado)
             {
                 if (provaSituacao == ProvaSituacao.EmAndamento)
