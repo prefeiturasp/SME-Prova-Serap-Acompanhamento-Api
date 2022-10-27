@@ -57,13 +57,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             if (filtro.ProvaSituacao == ProvaSituacao.EmAndamento)
             {
                 query = query
-                    && new QueryContainerDescriptor<ProvaTurmaResultado>().DateRange(d => d.Field(f => f.Inicio.Date).LessThanOrEquals(now))
-                    && new QueryContainerDescriptor<ProvaTurmaResultado>().DateRange(d => d.Field(f => f.Fim.Date).GreaterThanOrEquals(now));
+                    && new QueryContainerDescriptor<ProvaTurmaResultado>().DateRange(d => d.Field(f => f.Inicio).LessThanOrEquals(now))
+                    && new QueryContainerDescriptor<ProvaTurmaResultado>().DateRange(d => d.Field(f => f.Fim).GreaterThanOrEquals(now));
             }
             else if (filtro.ProvaSituacao == ProvaSituacao.Concluida)
             {
                 query = query
-                    && new QueryContainerDescriptor<ProvaTurmaResultado>().DateRange(d => d.Field(f => f.Fim.Date).LessThan(now));
+                    && new QueryContainerDescriptor<ProvaTurmaResultado>().DateRange(d => d.Field(f => f.Fim).LessThan(now));
             }
 
             if (filtro.DreId != null && filtro.DreId > 0)
