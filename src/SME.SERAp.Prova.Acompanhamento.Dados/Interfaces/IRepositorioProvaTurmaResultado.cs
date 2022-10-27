@@ -12,5 +12,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
         Task<double> ObterTotalProvasIniciadasHojePorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId);
         Task<double> ObterTotalProvasNaoFinalizadasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId);
         Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId);
+        Task<ResumoGeralProvaDto> ObterResumoGeralPorDreAsync(FiltroDto filtro, long dreId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId);
     }
 }

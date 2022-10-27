@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
 {
     [ApiController]
-    [Route("/api/v1/resumo-geral")]
+    [Route("/api/v1/resumo")]
     [Authorize("Bearer")]
     public class ResumoGeralController : Controller
     {
@@ -21,13 +21,17 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
             return Ok(await obterResumoGeralProvasUseCase.Executar(filtro));
         }
 
-        [HttpPost("reabrir-prova-aluno")]
+
+        [HttpGet("dre")]
         [ProducesResponseType(typeof(ResumoGeralDto), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ReabrirProvaAluno([FromBody] ReabrirProvaAlunoDto reabrirProvaDto, [FromServices] IReabrirProvaAlunoUseCase reabrirProvaAlunoUseCase)
+        public async Task<IActionResult> ObterResumoGeralDres([FromQuery] FiltroDto filtro, [FromServices] IObterResumoGeralProvasUseCase obterResumoGeralProvasUseCase)
         {
-            return Ok(await reabrirProvaAlunoUseCase.Executar(reabrirProvaDto));
+            return Ok(await obterResumoGeralProvasUseCase.Executar(filtro));
         }
+
+
+
 
 
     }
