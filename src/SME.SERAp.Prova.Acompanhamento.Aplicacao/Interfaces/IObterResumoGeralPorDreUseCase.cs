@@ -10,6 +10,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces
 {
    public interface IObterResumoGeralPorDreUseCase
     {
-        Task<IEnumerable<ResumoGeralDreDto>> Executar(FiltroDto filtro, long provaId);
+        Task<IEnumerable<ResumoGeralUnidadeDto>> Executar(FiltroDto filtro, long provaId);
     }
 }

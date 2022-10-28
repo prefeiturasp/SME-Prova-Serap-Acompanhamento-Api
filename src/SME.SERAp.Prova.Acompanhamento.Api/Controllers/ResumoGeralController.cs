@@ -25,11 +25,19 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
         [HttpGet("dres/prova/{provaId}")]
         [ProducesResponseType(typeof(ResumoGeralDto), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterResumoGeralDres([FromQuery] FiltroDto filtro, [FromQuery]  long provaId, [FromServices] IObterResumoGeralProvasUseCase obterResumoGeralProvasUseCase)
+        public async Task<IActionResult> ObterResumoGeralDres([FromQuery] FiltroDto filtro, [FromQuery]  long provaId, [FromServices] IObterResumoGeralPorDreUseCase obterResumoGeralPorDreUseCase)
+        {
+            return Ok(await obterResumoGeralPorDreUseCase.Executar(filtro, provaId));
+        }
+
+
+        [HttpGet("ues/dre/{dreId}/prova/{provaId}")]
+        [ProducesResponseType(typeof(ResumoGeralDto), 200)]
+        [ProducesResponseType(typeof(RetornoBaseDto), 500)]
+        public async Task<IActionResult> ObterResumoGeralUes([FromQuery] FiltroDto filtro, [FromQuery] long dreId, [FromQuery] long provaId, [FromServices] IObterResumoGeralProvasUseCase obterResumoGeralProvasUseCase)
         {
             return Ok(await obterResumoGeralProvasUseCase.Executar(filtro));
         }
-
 
 
 

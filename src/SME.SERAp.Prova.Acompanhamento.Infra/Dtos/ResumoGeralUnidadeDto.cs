@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Infra.Dtos
 {
-    public class ResumoGeralDreDto
+    public class ResumoGeralUnidadeDto
     {
 
-        public long DreId { get; set; }
-        public string DreNome { get; set; }
+        public long Id { get; set; }
+        public string Nome { get; set; }
 
         public ResumoGeralProvaDto Item { get; set; }
    

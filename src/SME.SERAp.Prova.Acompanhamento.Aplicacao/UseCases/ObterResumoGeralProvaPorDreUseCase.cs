@@ -14,13 +14,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
     {
         public ObterResumoGeralProvaPorDreUseCase(IMediator mediator) : base(mediator) { }
 
-        public async Task<IEnumerable<ResumoGeralDreDto>> Executar(FiltroDto filtro, long provaId)
+        public async Task<IEnumerable<ResumoGeralUnidadeDto>> Executar(FiltroDto filtro, long provaId)
         {
             var dresId = await mediator.Send(new ObterDresUsuarioLogadoQuery());
             var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
             var turmasId = await mediator.Send(new ObterTurmasUsuarioLogadoQuery());
             var dres = await mediator.Send(new ObterDresQuery(null));
-            var listaResumoGeralDre = new List<ResumoGeralDreDto>();
+            var listaResumoGeralDre = new List<ResumoGeralUnidadeDto>();
 
             foreach (var dre in dres)
             {
@@ -28,9 +28,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                 var retornoResumoGeralProva = await mediator.Send(new ObterResumoGeralProvaPorDreQuery(filtro, long.Parse(dre.Id), provaId, dresId, uesId, turmasId, filtro.NumeroPagina, filtro.NumeroRegistros));
                 if (retornoResumoGeralProva != null)
                 {
-                    var resumoGeralDre = new ResumoGeralDreDto();
-                    resumoGeralDre.DreId = long.Parse(dre.Id);
-                    resumoGeralDre.DreNome = dre.Nome;
+                    var resumoGeralDre = new ResumoGeralUnidadeDto();
+                    resumoGeralDre.Id = long.Parse(dre.Id);
+                    resumoGeralDre.Nome = dre.Nome;
                     resumoGeralDre.Item = retornoResumoGeralProva;
                     listaResumoGeralDre.Add(resumoGeralDre);
                 }
