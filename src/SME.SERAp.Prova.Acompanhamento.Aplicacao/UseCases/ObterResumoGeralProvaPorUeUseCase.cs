@@ -20,13 +20,16 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
             var turmasId = await mediator.Send(new ObterTurmasUsuarioLogadoQuery());
             var ues = await mediator.Send(new ObterUesQuery(dreId, uesId));
+
+   
+
             var listaResumoGeralUe = new List<ResumoGeralUnidadeDto>();
 
             foreach (var ue in ues)
             {
 
                 var retornoResumoGeralProva = await mediator.Send(new ObterResumoGeralProvaPorUeQuery(filtro, long.Parse(ue.Id), provaId, dresId, uesId, turmasId));
-                if (retornoResumoGeralProva != null)
+                if (retornoResumoGeralProva != null && retornoResumoGeralProva.TotalAlunos > 0)
                 {
                     var resumoGeralUe = new ResumoGeralUnidadeDto();
                     resumoGeralUe.Id = long.Parse(ue.Id);

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces
 {
-  public  interface IObterResumoGeralProvaPorUeUseCase
+    public interface IObterResumoGeralProvaPorTurmaUseCase
     {
-        Task<IEnumerable<ResumoGeralUnidadeDto>> Executar(FiltroDto filtro, long dreId, long provaId);
+        Task<IEnumerable<ResumoGeralUnidadeDto>> Executar(FiltroDto filtro, long ueId, long provaId);
     }
 }

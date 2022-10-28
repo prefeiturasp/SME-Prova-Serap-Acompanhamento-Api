@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterResumoGeralProvaPorUe
 {
-    class ObterResumoGeralProvaPorUeQueryHandler : IRequestHandler<ObterResumoGeralProvaPorUeQuery, ResumoGeralProvaDto>
+    public class ObterResumoGeralProvaPorUeQueryHandler : IRequestHandler<ObterResumoGeralProvaPorUeQuery, ResumoGeralProvaDto>
     {
         private readonly IRepositorioProvaTurmaResultado repositorioProvaTurmaResultado;
 

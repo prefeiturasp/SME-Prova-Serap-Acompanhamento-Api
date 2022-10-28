@@ -15,5 +15,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Interfaces
         Task<ResumoGeralProvaDto> ObterResumoGeralPorDreAsync(FiltroDto filtro, long dreId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId);
         Task<ResumoGeralProvaDto> ObterResumoGeralPorUeAsync(FiltroDto filtro, long ueId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId);
 
+        Task<ResumoGeralProvaDto> ObterResumoGeralPorTurmaAsync(FiltroDto filtro, long turmaId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId);
+
     }
 }

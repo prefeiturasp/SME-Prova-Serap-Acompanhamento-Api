@@ -25,7 +25,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
         [HttpGet("dres/prova/{provaId}")]
         [ProducesResponseType(typeof(ResumoGeralDto), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterResumoGeralDres([FromQuery] FiltroDto filtro, [FromQuery]  long provaId, [FromServices] IObterResumoGeralPorDreUseCase obterResumoGeralPorDreUseCase)
+        public async Task<IActionResult> ObterResumoGeralDres([FromQuery] FiltroDto filtro, long provaId, [FromServices] IObterResumoGeralPorDreUseCase obterResumoGeralPorDreUseCase)
         {
             return Ok(await obterResumoGeralPorDreUseCase.Executar(filtro, provaId));
         }
@@ -34,15 +34,18 @@ namespace SME.SERAp.Prova.Acompanhamento.Api.Controllers
         [HttpGet("ues/dre/{dreId}/prova/{provaId}")]
         [ProducesResponseType(typeof(ResumoGeralDto), 200)]
         [ProducesResponseType(typeof(RetornoBaseDto), 500)]
-        public async Task<IActionResult> ObterResumoGeralUes([FromQuery] FiltroDto filtro, [FromQuery] long dreId, [FromQuery] long provaId, [FromServices] IObterResumoGeralProvasUseCase obterResumoGeralProvasUseCase)
+        public async Task<IActionResult> ObterResumoGeralUes([FromQuery] FiltroDto filtro, long dreId, long provaId, [FromServices] IObterResumoGeralProvaPorUeUseCase obterResumoGeralProvaPorUeUseCase)
         {
-            return Ok(await obterResumoGeralProvasUseCase.Executar(filtro));
+            return Ok(await obterResumoGeralProvaPorUeUseCase.Executar(filtro, dreId, provaId));
         }
 
 
-
-
-
-
+        [HttpGet("turmas/ue/{ueId}/prova/{provaId}")]
+        [ProducesResponseType(typeof(ResumoGeralDto), 200)]
+        [ProducesResponseType(typeof(RetornoBaseDto), 500)]
+        public async Task<IActionResult> ObterResumoGeralTurmas([FromQuery] FiltroDto filtro, long ueId, long provaId, [FromServices] IObterResumoGeralProvaPorTurmaUseCase obterResumoGeralProvaPorTurmaUseCase)
+        {
+            return Ok(await obterResumoGeralProvaPorTurmaUseCase.Executar(filtro, ueId, provaId));
+        }
     }
 }

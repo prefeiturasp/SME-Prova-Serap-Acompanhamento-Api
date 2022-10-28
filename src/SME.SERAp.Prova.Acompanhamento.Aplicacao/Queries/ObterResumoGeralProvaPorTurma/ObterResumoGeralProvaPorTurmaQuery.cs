@@ -7,26 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterResumoGeralProvaPorUe
+namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterResumoGeralProvaPorTurma
 {
-  public  class ObterResumoGeralProvaPorUeQuery : IRequest<ResumoGeralProvaDto>
+  public  class ObterResumoGeralProvaPorTurmaQuery : IRequest<ResumoGeralProvaDto>
     {
-        public ObterResumoGeralProvaPorUeQuery(FiltroDto filtro, long ueId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId)
+        public ObterResumoGeralProvaPorTurmaQuery(FiltroDto filtro, long turmaId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId)
         {
             Filtro = filtro;
             DresAbrangenciaId = dresAbrangenciaId;
             UesAbrangenciaId = uesAbrangenciaId;
             TurmasAbrangenciaId = turmasAbrangenciaId;
-            UeId = ueId;
+            TurmaId = turmaId;
             ProvaId = provaId;
-          
+
         }
 
         public FiltroDto Filtro { get; set; }
         public long[] DresAbrangenciaId { get; set; }
         public long[] UesAbrangenciaId { get; set; }
         public long[] TurmasAbrangenciaId { get; set; }
-        public long UeId { get; set; }
+        public long TurmaId { get; set; }
         public long ProvaId { get; set; }
     }
 }
