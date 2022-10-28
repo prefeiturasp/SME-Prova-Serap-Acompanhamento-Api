@@ -42,5 +42,24 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             return response.Hits.Select(hit => hit.Source).ToList();
         }
+
+
+        public async Task<IEnumerable<Turma>> ObterPorUeIdAsync(int anoLetivo, long ueId)
+        {
+            QueryContainer query =
+                new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.AnoLetivo).Value(anoLetivo)) &&
+                new QueryContainerDescriptor<Turma>().Term(p => p.Field(p => p.UeId).Value(ueId));
+
+
+
+            var search = new SearchDescriptor<Turma>(IndexName).Query(q => query).From(0).Size(10000);
+
+            var response = await elasticClient.SearchAsync<Turma>(search);
+
+            if (!response.IsValid) return default;
+
+            return response.Hits.Select(hit => hit.Source).ToList();
+        }
     }
 }
+
