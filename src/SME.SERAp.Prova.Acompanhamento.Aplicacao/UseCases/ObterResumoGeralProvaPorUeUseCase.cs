@@ -14,14 +14,15 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
     {
         public ObterResumoGeralProvaPorUeUseCase(IMediator mediator) : base(mediator) { }
 
-        public async Task<IEnumerable<ResumoGeralUnidadeDto>> Executar(FiltroDto filtro, long dreId, long provaId)
+        public async Task<ResumoGeralUnidadePaginadaDto> Executar(FiltroDto filtro, long dreId, long provaId)
         {
             var dresId = await mediator.Send(new ObterDresUsuarioLogadoQuery());
             var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
             var turmasId = await mediator.Send(new ObterTurmasUsuarioLogadoQuery());
             var ues = await mediator.Send(new ObterUesQuery(dreId, uesId));
 
-   
+
+            var resumoGeral = new ResumoGeralUnidadePaginadaDto();
 
             var listaResumoGeralUe = new List<ResumoGeralUnidadeDto>();
 
@@ -39,7 +40,15 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                 }
             }
 
-            return listaResumoGeralUe;
+            resumoGeral.TotalRegistros = listaResumoGeralUe.Count();
+            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / filtro.NumeroRegistros);
+
+            var skip = (filtro.NumeroPagina - 1) * filtro.NumeroRegistros;
+            resumoGeral.Items = listaResumoGeralUe.Skip(skip).Take(filtro.NumeroRegistros).ToList();
+
+            return resumoGeral;
+
+           
         }
     }
 }
