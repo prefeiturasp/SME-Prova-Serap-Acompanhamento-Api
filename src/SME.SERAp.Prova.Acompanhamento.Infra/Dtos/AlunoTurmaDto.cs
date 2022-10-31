@@ -10,20 +10,18 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
 
         }
 
-        public AlunoTurmaDto(string nomeEstudante, bool fezDownload, long ra, DateTime? inicioProva, DateTime? fimProva, long? tempoMedio, int? questoesRespondidas, string usurioCoressoUltimaReabertura, DateTime? dataUltimaReabertura, SituacaoProvaAluno? situacaoProvaAluno)
+        public AlunoTurmaDto(string nomeEstudante, bool fezDownload, long ra, DateTime? inicioProva, DateTime? fimProva, long? tempoTotal, int? questoesRespondidas, string usurioCoressoUltimaReabertura, DateTime? dataUltimaReabertura, SituacaoProvaAluno? situacaoProvaAluno)
         {
             NomeEstudante = nomeEstudante;
             FezDownload = fezDownload;
             InicioProva = inicioProva;
             FimProva = fimProva;
-            TempoMedio = ConverterSegundosEmMinutos(tempoMedio);
+            TempoTotal = ConverterSegundosEmMinutos(tempoTotal);
             QuestoesRespondidas = questoesRespondidas;
             Ra = ra;
             SituacaoProvaAluno = situacaoProvaAluno;
             UsurioCoressoUltimaReabertura = usurioCoressoUltimaReabertura;
             DataUltimaReabertura = dataUltimaReabertura;
-
-
         }
 
         public long Ra { get; set; }
@@ -31,7 +29,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public bool FezDownload { get; set; }
         public DateTime? InicioProva { get; set; }
         public DateTime? FimProva { get; set; }
-        public long? TempoMedio { get; set; }
+        public long? TempoTotal { get; set; }
         public int? QuestoesRespondidas { get; set; }
         public string UltimaReabertura { get; set; }
         public bool PodeReabrirProva { get; set; }
@@ -42,13 +40,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
 
 
 
-        private long? ConverterSegundosEmMinutos(long? tempoMedio)
+        private long? ConverterSegundosEmMinutos(long? tempoTotal)
         {
-            if (tempoMedio == null || tempoMedio == 0)
-                return tempoMedio;
-            if (tempoMedio < 60)
+            if (tempoTotal == null || tempoTotal == 0)
+                return tempoTotal;
+            if (tempoTotal < 60)
                 return 0;
-            return tempoMedio / 60;
+            return tempoTotal / 60;
         }
 
     }
