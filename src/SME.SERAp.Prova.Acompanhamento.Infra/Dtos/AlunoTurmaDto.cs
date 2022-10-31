@@ -16,7 +16,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
             FezDownload = fezDownload;
             InicioProva = inicioProva;
             FimProva = fimProva;
-            TempoMedio = CalcularTempoMedioEmMinutos(tempoMedio);
+            TempoMedio = ConverterSegundosEmMinutos(tempoMedio);
             QuestoesRespondidas = questoesRespondidas;
             Ra = ra;
             SituacaoProvaAluno = situacaoProvaAluno;
@@ -42,7 +42,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
 
 
 
-        private long? CalcularTempoMedioEmMinutos(long? tempoMedio)
+        private long? ConverterSegundosEmMinutos(long? tempoMedio)
         {
             if (tempoMedio == null || tempoMedio == 0)
                 return tempoMedio;
