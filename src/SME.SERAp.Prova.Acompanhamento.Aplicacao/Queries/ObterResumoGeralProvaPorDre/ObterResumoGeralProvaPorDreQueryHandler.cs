@@ -19,7 +19,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
         public async Task<ResumoGeralProvaDto> Handle(ObterResumoGeralProvaPorDreQuery request, CancellationToken cancellationToken)
         {
            return  await repositorioProvaTurmaResultado.ObterResumoGeralPorDreAsync(request.Filtro, request.DreId, request.ProvaId, request.DresAbrangenciaId, request.UesAbrangenciaId, request.TurmasAbrangenciaId);
-
         }
     }
 }

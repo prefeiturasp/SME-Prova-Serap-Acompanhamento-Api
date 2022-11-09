@@ -113,8 +113,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
 
-            var totalTurmas = await ObterTotalTurmas(query);
-
             var resumoGeralProvaDto = new ResumoGeralProvaDto()
             {
                 TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
@@ -128,13 +126,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
                 },
-                TotalTurmas = (long)Math.Ceiling(totalTurmas)
+                TotalTurmas = await ObterTotalTurmas(query)
             };
 
             return resumoGeralProvaDto;
         }
 
-        public async Task<double> ObterTotalTurmas(QueryContainer query)
+        public async Task<long> ObterTotalTurmas(QueryContainer query)
         {
             var searchTotalTurmas = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(q => !q.Term(p => p.TempoMedio, 0) && query)
@@ -144,7 +142,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var responseTotalTurmas = await elasticClient.SearchAsync<ProvaTurmaResultado>(searchTotalTurmas);
             if (!responseTotalTurmas.IsValid) return 0;
 
-            return responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
+            var totalTurmas = responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
+            return (long)Math.Ceiling(totalTurmas);
         }
 
         public async Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
@@ -228,8 +227,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
 
-        
-
             var resumoGeralProvaDto = new ResumoGeralProvaDto()
             {
                 TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
@@ -243,7 +240,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
                 },
-               
+                TotalTurmas = await ObterTotalTurmas(query)
             };
 
             return resumoGeralProvaDto;
@@ -289,7 +286,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
                 },
-
+                TotalTurmas = await ObterTotalTurmas(query)
             };
 
             return resumoGeralProvaDto;
@@ -321,8 +318,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
 
-
-
             var resumoGeralProvaDto = new ResumoGeralProvaDto()
             {
                 TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
@@ -335,8 +330,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     QtdeQuestoesProva = Convert.ToInt64(response.Aggregations.ValueCount("QtdeQuestoesProva").Value.GetValueOrDefault()),
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
-                },
-
+                }
             };
 
             return resumoGeralProvaDto;
