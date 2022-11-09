@@ -26,7 +26,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                         .Index(IndexName)
                         .Query(_ => query));
 
-            return result?.Documents.ToList();
+            var abrangencias = result?.Hits.Select(t => t.Source).ToList();
+
+            return abrangencias.Where(t => t.Login == login && t.GrupoId == grupo);
         }
 
 
@@ -41,7 +43,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                         .Index(IndexName)
                         .Query(_ => query));
 
-            return result?.Documents.ToList().FirstOrDefault();
+            var abrangencias = result?.Hits.Select(t => t.Source).ToList();
+
+            return abrangencias.Where(t => t.UsuarioId == UsuarioCoressoId).FirstOrDefault();
         }
     }
 }
