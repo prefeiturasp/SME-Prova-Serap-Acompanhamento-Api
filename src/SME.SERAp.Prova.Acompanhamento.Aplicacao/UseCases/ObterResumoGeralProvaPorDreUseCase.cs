@@ -36,12 +36,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     listaResumoGeralDre.Add(resumoGeralDre);
                 }
             }
-            resumoGeral.TotalRegistros = listaResumoGeralDre.Count();
-            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / filtro.NumeroRegistros);
 
-            var skip = (filtro.NumeroPagina - 1) * filtro.NumeroRegistros;
-            resumoGeral.Items = listaResumoGeralDre.Skip(skip).Take(filtro.NumeroRegistros).OrderBy(x=> x.Nome).ToList();
-
+            resumoGeral.Items = listaResumoGeralDre.OrderBy(x=> x.Nome).ToList();
             return resumoGeral;
 
         }
