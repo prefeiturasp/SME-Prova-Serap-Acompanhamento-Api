@@ -109,11 +109,9 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     && a.Min("QtdeQuestoesProva", s => s.Field(f => f.QuantidadeQuestoes))
                     && a.Sum("TotalQuestoes", s => s.Field(f => f.TotalQuestoes))
                     && a.Sum("Respondidas", s => s.Field(f => f.QuestoesRespondidas)));
-
+                    
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
-
-            var totalTurmas = await ObterTotalTurmas(query);
 
             var resumoGeralProvaDto = new ResumoGeralProvaDto()
             {
@@ -128,13 +126,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
                     Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
                 },
-                TotalTurmas = (long)Math.Ceiling(totalTurmas)
+                TotalTurmas = await ObterTotalTurmas(query)
             };
 
             return resumoGeralProvaDto;
         }
 
-        public async Task<double> ObterTotalTurmas(QueryContainer query)
+        public async Task<long> ObterTotalTurmas(QueryContainer query)
         {
             var searchTotalTurmas = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(q => !q.Term(p => p.TempoMedio, 0) && query)
@@ -144,7 +142,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             var responseTotalTurmas = await elasticClient.SearchAsync<ProvaTurmaResultado>(searchTotalTurmas);
             if (!responseTotalTurmas.IsValid) return 0;
 
-            return responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
+            var totalTurmas = responseTotalTurmas.Aggregations.ValueCount("TotalTurmas").Value.GetValueOrDefault();
+            return (long)Math.Ceiling(totalTurmas);
         }
 
         public async Task<double> ObterTotalProvasPorFiltroAsync(FiltroDto filtro, long[] dresId, long[] uesId, long[] turmasId)
@@ -202,5 +201,140 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             return response.Aggregations.ValueCount("TotalFinalizados").Value.GetValueOrDefault();
         }
+
+        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorDreAsync(FiltroDto filtro, long dreId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId)
+        {
+            QueryContainer query = MontarQueryFiltro(filtro, dresAbrangenciaId, uesAbrangenciaId, turmasAbrangenciaId);
+
+            query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
+
+            query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.DreId).Value(dreId));
+
+            var resultado = new List<ProvaTurmaResultado>();
+
+            var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
+                .Query(_ => query)
+                .Size(0)
+                .Aggregations(a => a.Sum("TotalAlunos", s => s.Field(f => f.TotalAlunos))
+                    && a.Sum("ProvasIniciadas", s => s.Field(f => f.TotalIniciadas))
+                    && a.Sum("ProvasNaoFinalizadas", s => s.Field(f => f.TotalNaoFinalizados))
+                    && a.Sum("ProvasFinalizadas", s => s.Field(f => f.TotalFinalizados))
+                    && a.Sum("TotalTempoMedio", s => s.Field(f => f.TempoMedio))
+                    && a.Min("QtdeQuestoesProva", s => s.Field(f => f.QuantidadeQuestoes))
+                    && a.Sum("TotalQuestoes", s => s.Field(f => f.TotalQuestoes))
+                    && a.Sum("Respondidas", s => s.Field(f => f.QuestoesRespondidas)));
+
+            var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
+            if (!response.IsValid) return default;
+
+            var resumoGeralProvaDto = new ResumoGeralProvaDto()
+            {
+                TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
+                ProvasIniciadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasIniciadas").Value.GetValueOrDefault()),
+                ProvasNaoFinalizadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasNaoFinalizadas").Value.GetValueOrDefault()),
+                ProvasFinalizadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasFinalizadas").Value.GetValueOrDefault()),
+                TotalTempoMedio = Convert.ToInt64(response.Aggregations.ValueCount("TotalTempoMedio").Value.GetValueOrDefault()),
+                DetalheProva = new DetalheProvaDto()
+                {
+                    QtdeQuestoesProva = Convert.ToInt64(response.Aggregations.ValueCount("QtdeQuestoesProva").Value.GetValueOrDefault()),
+                    TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
+                    Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
+                },
+                TotalTurmas = await ObterTotalTurmas(query)
+            };
+
+            return resumoGeralProvaDto;
+        }
+
+        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorUeAsync(FiltroDto filtro, long ueId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId)
+        {
+            QueryContainer query = MontarQueryFiltro(filtro, dresAbrangenciaId, uesAbrangenciaId, turmasAbrangenciaId);
+
+            query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
+
+            query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.UeId).Value(ueId));
+
+            var resultado = new List<ProvaTurmaResultado>();
+
+            var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
+                .Query(_ => query)
+                .Size(0)
+                .Aggregations(a => a.Sum("TotalAlunos", s => s.Field(f => f.TotalAlunos))
+                    && a.Sum("ProvasIniciadas", s => s.Field(f => f.TotalIniciadas))
+                    && a.Sum("ProvasNaoFinalizadas", s => s.Field(f => f.TotalNaoFinalizados))
+                    && a.Sum("ProvasFinalizadas", s => s.Field(f => f.TotalFinalizados))
+                    && a.Sum("TotalTempoMedio", s => s.Field(f => f.TempoMedio))
+                    && a.Min("QtdeQuestoesProva", s => s.Field(f => f.QuantidadeQuestoes))
+                    && a.Sum("TotalQuestoes", s => s.Field(f => f.TotalQuestoes))
+                    && a.Sum("Respondidas", s => s.Field(f => f.QuestoesRespondidas)));
+
+            var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
+            if (!response.IsValid) return default;
+
+
+
+            var resumoGeralProvaDto = new ResumoGeralProvaDto()
+            {
+                TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
+                ProvasIniciadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasIniciadas").Value.GetValueOrDefault()),
+                ProvasNaoFinalizadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasNaoFinalizadas").Value.GetValueOrDefault()),
+                ProvasFinalizadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasFinalizadas").Value.GetValueOrDefault()),
+                TotalTempoMedio = Convert.ToInt64(response.Aggregations.ValueCount("TotalTempoMedio").Value.GetValueOrDefault()),
+                DetalheProva = new DetalheProvaDto()
+                {
+                    QtdeQuestoesProva = Convert.ToInt64(response.Aggregations.ValueCount("QtdeQuestoesProva").Value.GetValueOrDefault()),
+                    TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
+                    Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
+                },
+                TotalTurmas = await ObterTotalTurmas(query)
+            };
+
+            return resumoGeralProvaDto;
+        }
+
+
+        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorTurmaAsync(FiltroDto filtro, long turmaId, long provaId, long[] dresAbrangenciaId, long[] uesAbrangenciaId, long[] turmasAbrangenciaId)
+        {
+            QueryContainer query = MontarQueryFiltro(filtro, dresAbrangenciaId, uesAbrangenciaId, turmasAbrangenciaId);
+
+            query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.ProvaId).Value(provaId));
+
+            query = query && new QueryContainerDescriptor<ProvaTurmaResultado>().Term(p => p.Field(p => p.TurmaId).Value(turmaId));
+
+            var resultado = new List<ProvaTurmaResultado>();
+
+            var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
+                .Query(_ => query)
+                .Size(0)
+                .Aggregations(a => a.Sum("TotalAlunos", s => s.Field(f => f.TotalAlunos))
+                    && a.Sum("ProvasIniciadas", s => s.Field(f => f.TotalIniciadas))
+                    && a.Sum("ProvasNaoFinalizadas", s => s.Field(f => f.TotalNaoFinalizados))
+                    && a.Sum("ProvasFinalizadas", s => s.Field(f => f.TotalFinalizados))
+                    && a.Sum("TotalTempoMedio", s => s.Field(f => f.TempoMedio))
+                    && a.Min("QtdeQuestoesProva", s => s.Field(f => f.QuantidadeQuestoes))
+                    && a.Sum("TotalQuestoes", s => s.Field(f => f.TotalQuestoes))
+                    && a.Sum("Respondidas", s => s.Field(f => f.QuestoesRespondidas)));
+
+            var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
+            if (!response.IsValid) return default;
+
+            var resumoGeralProvaDto = new ResumoGeralProvaDto()
+            {
+                TotalAlunos = Convert.ToInt64(response.Aggregations.ValueCount("TotalAlunos").Value.GetValueOrDefault()),
+                ProvasIniciadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasIniciadas").Value.GetValueOrDefault()),
+                ProvasNaoFinalizadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasNaoFinalizadas").Value.GetValueOrDefault()),
+                ProvasFinalizadas = Convert.ToInt64(response.Aggregations.ValueCount("ProvasFinalizadas").Value.GetValueOrDefault()),
+                TotalTempoMedio = Convert.ToInt64(response.Aggregations.ValueCount("TotalTempoMedio").Value.GetValueOrDefault()),
+                DetalheProva = new DetalheProvaDto()
+                {
+                    QtdeQuestoesProva = Convert.ToInt64(response.Aggregations.ValueCount("QtdeQuestoesProva").Value.GetValueOrDefault()),
+                    TotalQuestoes = Convert.ToDecimal(response.Aggregations.ValueCount("TotalQuestoes").Value.GetValueOrDefault()),
+                    Respondidas = Convert.ToDecimal(response.Aggregations.ValueCount("Respondidas").Value.GetValueOrDefault()),
+                }
+            };
+
+            return resumoGeralProvaDto;
+        }
     }
+
 }
