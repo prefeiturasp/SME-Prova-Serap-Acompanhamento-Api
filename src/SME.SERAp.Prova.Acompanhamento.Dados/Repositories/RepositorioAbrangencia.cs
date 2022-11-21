@@ -24,7 +24,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             var result = await elasticClient.SearchAsync<Abrangencia>(s => s
                         .Index(IndexName)
-                        .Query(_ => query));
+                        .Query(_ => query)
+                        .Size(1000));
 
             var abrangencias = result?.Hits.Select(t => t.Source).ToList();
 
