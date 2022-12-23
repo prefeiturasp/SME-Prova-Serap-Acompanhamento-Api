@@ -2,7 +2,6 @@
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using SME.SERAp.Prova.Acompanhamento.Infra.Exceptions;
-using SME.SERAp.Prova.Acompanhamento.Infra.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +9,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 {
     public class AutenticacaoUseCase : AbstractUseCase, IAutenticacaoUseCase
     {
-         
+
         public AutenticacaoUseCase(IMediator mediator) : base(mediator)
         {
         }
