@@ -3,7 +3,6 @@ using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterResumoGeralProvaPorTurma;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterTurmasPorUe;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
