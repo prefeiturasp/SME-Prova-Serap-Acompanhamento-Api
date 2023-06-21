@@ -14,12 +14,22 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
         {
         }
 
-        public async Task<IEnumerable<SelecioneDto>> Executar(int anoLetivo, Modalidade modalidade, long euId)
+        public async Task<IEnumerable<SelecioneDto>> Executar(int anoLetivo, Modalidade modalidade, long ueId)
         {
-            var anos = await mediator.Send(new ObterAnosQuery(anoLetivo, modalidade, euId));
+            var anos = await mediator.Send(new ObterAnosQuery(anoLetivo, modalidade, ueId));
             if (anos == null && !anos.Any()) return default;
 
-            return anos.Select(s => new SelecioneDto(s.Nome, $"{s.Nome}° Ano")).OrderBy(o => o.Descricao);
+            var retorno = new List<SelecioneDto>();
+            var turmaIds = await mediator.Send(new ObterTurmasUsuarioLogadoQuery());
+            foreach (var ano in anos)
+            {
+                var turmas = await mediator.Send(new ObterTurmasQuery(anoLetivo, ueId, modalidade, ano.Nome, turmaIds));
+
+                if (turmas != null && turmas.Any())
+                    retorno.Add(new SelecioneDto(ano.Nome, $"{ano.Nome}° Ano"));
+            }
+
+            return retorno.OrderBy(o => o.Descricao);
         }
     }
 }

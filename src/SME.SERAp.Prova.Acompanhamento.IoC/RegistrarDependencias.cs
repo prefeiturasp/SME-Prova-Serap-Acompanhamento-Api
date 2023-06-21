@@ -59,6 +59,13 @@ namespace SME.SERAp.Prova.Acompanhamento.IoC
             services.AddScoped<IObterAlunosProvaTurmaUseCase, ObterAlunosProvaTurmaUseCase>();
             services.AddScoped<IObterTotaisProvasUseCase, ObterTotaisProvasUseCase>();
             services.AddScoped<IObterResumoGeralProvasUseCase, ObterResumoGeralProvasUseCase>();
+            services.AddScoped<IReabrirProvaAlunoUseCase, ReabrirProvaAlunoUseCase>();
+            services.AddScoped<IObterGraficosUseCase, ObterGraficosUseCase>();
+
+            services.AddScoped<IObterResumoGeralPorDreUseCase, ObterResumoGeralProvaPorDreUseCase>();
+            services.AddScoped<IObterResumoGeralProvaPorUeUseCase, ObterResumoGeralProvaPorUeUseCase>();
+            services.AddScoped<IObterResumoGeralProvaPorTurmaUseCase, ObterResumoGeralProvaPorTurmaUseCase>();
+
         }
     }
 }
