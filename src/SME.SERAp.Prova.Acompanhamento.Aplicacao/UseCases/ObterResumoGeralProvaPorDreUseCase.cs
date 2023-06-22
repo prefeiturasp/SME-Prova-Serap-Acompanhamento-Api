@@ -1,11 +1,8 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
-using SME.SERAp.Prova.Acompanhamento.Infra;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
@@ -33,16 +30,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralDre = new ResumoGeralUnidadeDto();
                     resumoGeralDre.Id = long.Parse(dre.Id);
                     resumoGeralDre.Nome = dre.Nome;
+                    retornoResumoGeralProva.CalcularTempoMedio();
                     resumoGeralDre.Item = retornoResumoGeralProva;
                     listaResumoGeralDre.Add(resumoGeralDre);
                 }
             }
-            resumoGeral.TotalRegistros = listaResumoGeralDre.Count();
-            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / filtro.NumeroRegistros);
 
-            var skip = (filtro.NumeroPagina - 1) * filtro.NumeroRegistros;
-            resumoGeral.Items = listaResumoGeralDre.Skip(skip).Take(filtro.NumeroRegistros).OrderBy(x=> x.Nome).ToList();
-
+            resumoGeral.Items = listaResumoGeralDre.OrderBy(x => x.Nome).ToList();
             return resumoGeral;
 
         }

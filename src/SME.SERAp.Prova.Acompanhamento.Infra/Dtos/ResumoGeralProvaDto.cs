@@ -29,5 +29,15 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         }
         public DetalheProvaDto DetalheProva { get; set; }
         public long TotalTurmas { get; set; }
+
+        public void CalcularTempoMedio()
+        {
+            TempoMedio = TotalTempoMedio > 0 ? (int)(TotalTempoMedio / TotalTurmas) : 0;
+        }
+
+        public void CalcularTempoMedioTurma()
+        {
+            TempoMedio = TotalTempoMedio > 0 ? (int)(TotalTempoMedio / TotalAlunos) : 0;
+        }
     }
 }

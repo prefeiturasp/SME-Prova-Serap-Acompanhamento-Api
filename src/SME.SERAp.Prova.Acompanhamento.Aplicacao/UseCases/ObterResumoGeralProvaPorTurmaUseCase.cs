@@ -2,12 +2,9 @@
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterResumoGeralProvaPorTurma;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterTurmasPorUe;
-using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
@@ -37,18 +34,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralTurma = new ResumoGeralUnidadeDto();
                     resumoGeralTurma.Id = long.Parse(turma.Id);
                     resumoGeralTurma.Nome = turma.Nome;
+                    retornoResumoGeralProva.CalcularTempoMedioTurma();
                     resumoGeralTurma.Item = retornoResumoGeralProva;
                     listaResumoGeralTurma.Add(resumoGeralTurma);
                 }
             }
 
-            resumoGeral.TotalRegistros = listaResumoGeralTurma.Count();
-            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / filtro.NumeroRegistros);
-
-            var skip = (filtro.NumeroPagina - 1) * filtro.NumeroRegistros;
-            resumoGeral.Items = listaResumoGeralTurma.Skip(skip).Take(filtro.NumeroRegistros).OrderBy(x => x.Nome).ToList();
-
-
+            resumoGeral.Items = listaResumoGeralTurma.OrderBy(x => x.Nome).ToList();
             return resumoGeral;
         }
     }

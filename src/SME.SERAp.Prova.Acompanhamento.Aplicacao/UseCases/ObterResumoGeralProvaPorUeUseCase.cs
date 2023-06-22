@@ -2,10 +2,8 @@
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries.ObterResumoGeralProvaPorUe;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
@@ -35,20 +33,16 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralUe = new ResumoGeralUnidadeDto();
                     resumoGeralUe.Id = long.Parse(ue.Id);
                     resumoGeralUe.Nome = ue.Nome;
+                    retornoResumoGeralProva.CalcularTempoMedio();
                     resumoGeralUe.Item = retornoResumoGeralProva;
                     listaResumoGeralUe.Add(resumoGeralUe);
                 }
             }
 
-            resumoGeral.TotalRegistros = listaResumoGeralUe.Count();
-            resumoGeral.TotalPaginas = (int)Math.Ceiling((double)resumoGeral.TotalRegistros / filtro.NumeroRegistros);
-
-            var skip = (filtro.NumeroPagina - 1) * filtro.NumeroRegistros;
-            resumoGeral.Items = listaResumoGeralUe.Skip(skip).Take(filtro.NumeroRegistros).OrderBy(x => x.Nome).ToList();
-
+            resumoGeral.Items = listaResumoGeralUe.OrderBy(x => x.Nome).ToList();
             return resumoGeral;
 
-           
+
         }
     }
 }
