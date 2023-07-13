@@ -5,6 +5,7 @@ using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 {
@@ -33,6 +34,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralUe = new ResumoGeralUnidadeDto();
                     resumoGeralUe.Id = long.Parse(ue.Id);
                     resumoGeralUe.Nome = ue.Nome;
+                    resumoGeralUe.Turno = string.Empty;
                     retornoResumoGeralProva.CalcularTempoMedio();
                     resumoGeralUe.Item = retornoResumoGeralProva;
                     listaResumoGeralUe.Add(resumoGeralUe);

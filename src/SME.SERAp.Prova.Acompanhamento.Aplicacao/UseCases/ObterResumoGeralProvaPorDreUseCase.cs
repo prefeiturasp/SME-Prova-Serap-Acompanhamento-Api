@@ -30,6 +30,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralDre = new ResumoGeralUnidadeDto();
                     resumoGeralDre.Id = long.Parse(dre.Id);
                     resumoGeralDre.Nome = dre.Nome;
+                    resumoGeralDre.Turno = string.Empty;
                     retornoResumoGeralProva.CalcularTempoMedio();
                     resumoGeralDre.Item = retornoResumoGeralProva;
                     listaResumoGeralDre.Add(resumoGeralDre);
