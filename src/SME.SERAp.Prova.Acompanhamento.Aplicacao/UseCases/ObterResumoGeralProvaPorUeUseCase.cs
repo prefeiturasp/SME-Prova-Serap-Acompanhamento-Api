@@ -5,7 +5,6 @@ using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 {
