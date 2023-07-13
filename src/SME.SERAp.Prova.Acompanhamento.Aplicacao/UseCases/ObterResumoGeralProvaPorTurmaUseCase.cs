@@ -6,6 +6,7 @@ using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SME.SERAp.Prova.Acompanhamento.Infra.Extensions;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 {
@@ -34,6 +35,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralTurma = new ResumoGeralUnidadeDto();
                     resumoGeralTurma.Id = long.Parse(turma.Id);
                     resumoGeralTurma.Nome = turma.Nome;
+                    resumoGeralTurma.Turno = turma.Turno.Descricao();
                     retornoResumoGeralProva.CalcularTempoMedioTurma();
                     resumoGeralTurma.Item = retornoResumoGeralProva;
                     listaResumoGeralTurma.Add(resumoGeralTurma);
