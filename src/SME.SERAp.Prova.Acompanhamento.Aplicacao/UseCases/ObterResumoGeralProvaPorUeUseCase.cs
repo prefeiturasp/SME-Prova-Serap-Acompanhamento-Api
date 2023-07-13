@@ -34,7 +34,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                     var resumoGeralUe = new ResumoGeralUnidadeDto();
                     resumoGeralUe.Id = long.Parse(ue.Id);
                     resumoGeralUe.Nome = ue.Nome;
-                    resumoGeralUe.Turno = string.Empty;
                     retornoResumoGeralProva.CalcularTempoMedio();
                     resumoGeralUe.Item = retornoResumoGeralProva;
                     listaResumoGeralUe.Add(resumoGeralUe);
