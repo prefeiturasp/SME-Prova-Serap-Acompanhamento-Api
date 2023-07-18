@@ -9,7 +9,13 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
     {
         public async Task<IEnumerable<SelecioneDto>> Executar()
         {
-            return await Task.FromResult(new List<SelecioneDto> { new SelecioneDto(2022, "2022") });
+            var listaRetorno = new List<SelecioneDto>
+            {
+                new(2023, "2023"),
+                new(2022, "2022")
+            };
+
+            return await Task.FromResult(listaRetorno);
         }
     }
 }
