@@ -49,7 +49,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             {
                 var abrangencia = await mediator.Send(new ObterNomeUsuarioPorIdCoressoQuery(alunoProva.UsurioCoressoUltimaReabertura));
 
-                if(abrangencia != null)
+                if (abrangencia != null)
                     return $"{abrangencia.Usuario} -  {alunoProva.DataUltimaReabertura}";
             }
 
@@ -60,7 +60,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
         {
             var claims = await mediator.Send(new ObterAbrangenciaUsuarioLogadoPorClaimsQuery("PERMITEALTERAR"));
             var permiteAlterar = claims.FirstOrDefault(a => a.Chave == "PERMITEALTERAR")?.Valor;
-            var prova = await mediator.Send(new ObterProvaPorIdQuery(provaId)); //tratar se prova null 
+            var prova = await mediator.Send(new ObterProvaPorIdQuery(provaId));
+            if (prova == null) return false;
             var periodoProva = prova.Inicio <= DateTime.Now.Date && prova.Fim >= DateTime.Now.Date;
             var podeReabrir = periodoProva && permiteAlterar != null;
             return podeReabrir;
