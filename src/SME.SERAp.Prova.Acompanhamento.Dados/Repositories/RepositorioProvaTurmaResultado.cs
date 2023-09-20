@@ -109,7 +109,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
                     && a.Min("QtdeQuestoesProva", s => s.Field(f => f.QuantidadeQuestoes))
                     && a.Sum("TotalQuestoes", s => s.Field(f => f.TotalQuestoes))
                     && a.Sum("Respondidas", s => s.Field(f => f.QuestoesRespondidas)));
-                    
+
             var response = await elasticClient.SearchAsync<ProvaTurmaResultado>(search);
             if (!response.IsValid) return default;
 

@@ -1,14 +1,9 @@
-﻿using SME.SERAp.Prova.Acompanhamento.Infra;
-using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces
 {
-   public interface IObterResumoGeralPorDreUseCase
+    public interface IObterResumoGeralPorDreUseCase
     {
         Task<ResumoGeralUnidadePaginadaDto> Executar(FiltroDto filtro, long provaId);
     }

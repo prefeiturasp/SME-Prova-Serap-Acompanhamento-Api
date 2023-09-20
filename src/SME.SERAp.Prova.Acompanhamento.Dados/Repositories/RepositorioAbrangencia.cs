@@ -20,7 +20,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
 
             var query =
                 new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(f => f.Login).Query(login)) &&
-                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(f => f.GrupoId).Query(grupo));
+                new QueryContainerDescriptor<Abrangencia>().Term(p => p.Field(f => f.GrupoId.Suffix("keyword")).Value(grupo));
 
             var result = await elasticClient.SearchAsync<Abrangencia>(s => s
                         .Index(IndexName)
@@ -38,15 +38,16 @@ namespace SME.SERAp.Prova.Acompanhamento.Dados.Repositories
             UsuarioCoressoId = UsuarioCoressoId.ToLower();
 
             var query =
-                new QueryContainerDescriptor<Abrangencia>().Match(p => p.Field(f => f.UsuarioId).Query(UsuarioCoressoId));
+                new QueryContainerDescriptor<Abrangencia>().Term(p => p.Field(f => f.UsuarioId.Suffix("keyword")).Value(UsuarioCoressoId));
 
             var result = await elasticClient.SearchAsync<Abrangencia>(s => s
                         .Index(IndexName)
-                        .Query(_ => query));
+                        .Query(_ => query)
+                        .Size(1000));
 
             var abrangencias = result?.Hits.Select(t => t.Source).ToList();
 
-            return abrangencias.Where(t => t.UsuarioId == UsuarioCoressoId).FirstOrDefault();
+            return abrangencias.FirstOrDefault(t => t.UsuarioId == UsuarioCoressoId);
         }
     }
 }

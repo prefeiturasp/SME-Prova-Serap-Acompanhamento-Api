@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,7 +36,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
                 }
             }
 
-            resumoGeral.Items = listaResumoGeralDre.OrderBy(x=> x.Nome).ToList();
+            resumoGeral.Items = listaResumoGeralDre.OrderBy(x => x.Nome).ToList();
             return resumoGeral;
 
         }
