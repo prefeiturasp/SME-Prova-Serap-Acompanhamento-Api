@@ -3,7 +3,7 @@ pipeline {
       branchname =  env.BRANCH_NAME.toLowerCase()
       kubeconfig = getKubeconf(env.branchname)
       registryCredential = 'jenkins_registry'
-      namespace = "${env.branchname == 'develop' ? 'sme-serap-acomp-dev' : env.branchname == 'release' ? 'sme-serap-acomp-hom' : env.branchname == 'release-r2' ? 'sme-serap-acomp-hom2' : 'sme-serap-acompanhamento' }" 
+      namespace = "${env.branchname == 'develop' ? 'serap-acomp-dev' : env.branchname == 'release' ? 'serap-acomp-hom' : env.branchname == 'release-r2' ? 'serap-acomp-hom2' : 'sme-serap-acompanhamento' }" 
     }
   
     agent {
