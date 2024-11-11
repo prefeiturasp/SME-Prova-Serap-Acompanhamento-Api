@@ -11,6 +11,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
         {
             var listaRetorno = new List<SelecioneDto>
             {
+                new(2024, "2024"),
                 new(2023, "2023"),
                 new(2022, "2022")
             };
