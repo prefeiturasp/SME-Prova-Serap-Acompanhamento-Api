@@ -15,7 +15,8 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
         public async Task<IEnumerable<AlunoTurmaDto>> Executar(long provaId, long turmaId)
         {
-            bool provaPodeSerReaberta = await VerificaSeProvaPodeSerReaberta(provaId);
+            var prova = await mediator.Send(new ObterProvaPorIdQuery(provaId));
+            var provaPodeSerReaberta = await VerificaSeProvaPodeSerReaberta(prova);
             var listaAlunosProva = await mediator.Send(new ObterAlunosProvaTurmaQuery(provaId, turmaId));
 
             if (listaAlunosProva == null || !listaAlunosProva.Any()) return default;
@@ -26,16 +27,19 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             {
                 alunoProva.UltimaReabertura = await VerificaInformacaoUltimaReabertura(alunoProva);
 
-                alunoProva.PodeReabrirProva = alunoPodeterAProvaReaberta(provaPodeSerReaberta, alunoProva);
+                alunoProva.PodeReabrirProva = alunoPodeterAProvaReaberta(prova, provaPodeSerReaberta, alunoProva);
 
             }
             return listaAlunosProva.OrderBy(t => t.NomeEstudante);
         }
 
-        private bool alunoPodeterAProvaReaberta(bool provaPodeSerReaberta, AlunoTurmaDto alunoProva)
+        private bool alunoPodeterAProvaReaberta(Dominio.Entities.Prova prova, bool provaPodeSerReaberta, AlunoTurmaDto alunoProva)
         {
             if (provaPodeSerReaberta && alunoProva.SituacaoProvaAluno != Dominio.Enums.SituacaoProvaAluno.Reabrindo)
             {
+                if (prova.FormatoTai && VerificaSePodeReabrirProvaFormatoTai(prova, alunoProva))
+                    return true;
+
                 return (alunoProva.FimProva != null && alunoProva.SituacaoProvaAluno == null) ||
                                                 alunoProva.SituacaoProvaAluno == Dominio.Enums.SituacaoProvaAluno.Finalizada ? true : false;
             }
@@ -56,15 +60,27 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
             return string.Empty;
         }
 
-        private async Task<bool> VerificaSeProvaPodeSerReaberta(long provaId)
+        private async Task<bool> VerificaSeProvaPodeSerReaberta(Dominio.Entities.Prova prova)
         {
+            if (prova == null)
+                return false;
+
             var claims = await mediator.Send(new ObterAbrangenciaUsuarioLogadoPorClaimsQuery("PERMITEALTERAR"));
             var permiteAlterar = claims.FirstOrDefault(a => a.Chave == "PERMITEALTERAR")?.Valor;
-            var prova = await mediator.Send(new ObterProvaPorIdQuery(provaId));
-            if (prova == null) return false;
             var periodoProva = prova.Inicio <= DateTime.Now.Date && prova.Fim >= DateTime.Now.Date;
             var podeReabrir = periodoProva && permiteAlterar != null;
             return podeReabrir;
+        }
+
+        private static List<Dominio.Enums.SituacaoProvaAluno> ObterSituacoesReabrirProvaTai()
+        {
+            return new List<Dominio.Enums.SituacaoProvaAluno> { Dominio.Enums.SituacaoProvaAluno.NaoIniciado, Dominio.Enums.SituacaoProvaAluno.EmAndamento, Dominio.Enums.SituacaoProvaAluno.Finalizada };
+        }
+
+        private static bool VerificaSePodeReabrirProvaFormatoTai(Dominio.Entities.Prova prova, AlunoTurmaDto alunoProva)
+        {
+            var situacoesReabrirProvaTai = ObterSituacoesReabrirProvaTai();
+            return prova.FormatoTai && alunoProva.InicioProva is not null && alunoProva.SituacaoProvaAluno is not null && situacoesReabrirProvaTai.Contains(alunoProva.SituacaoProvaAluno.Value);
         }
     }
 }
