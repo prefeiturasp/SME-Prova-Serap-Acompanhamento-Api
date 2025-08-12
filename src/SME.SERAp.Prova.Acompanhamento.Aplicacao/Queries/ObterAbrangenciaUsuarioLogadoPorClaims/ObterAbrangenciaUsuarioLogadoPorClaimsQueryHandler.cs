@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries
 {
-    class ObterAbrangenciaUsuarioLogadoPorClaimsQueryHandler : IRequestHandler<ObterAbrangenciaUsuarioLogadoPorClaimsQuery, IEnumerable<ParametroDto>>
+    public class ObterAbrangenciaUsuarioLogadoPorClaimsQueryHandler : IRequestHandler<ObterAbrangenciaUsuarioLogadoPorClaimsQuery, IEnumerable<ParametroDto>>
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 

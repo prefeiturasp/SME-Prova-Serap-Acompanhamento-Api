@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Interfaces;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.Queries;
-using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using System;
 using System.Collections.Generic;
@@ -63,7 +62,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
 
         private async Task<bool> VerificaSeProvaPodeSerReaberta(Dominio.Entities.Prova prova)
         {
-            if (prova == null) 
+            if (prova == null)
                 return false;
 
             var claims = await mediator.Send(new ObterAbrangenciaUsuarioLogadoPorClaimsQuery("PERMITEALTERAR"));
