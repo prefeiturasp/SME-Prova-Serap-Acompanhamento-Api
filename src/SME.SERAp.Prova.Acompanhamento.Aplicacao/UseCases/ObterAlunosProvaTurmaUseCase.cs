@@ -80,7 +80,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases
         private static bool VerificaSePodeReabrirProvaFormatoTai(Dominio.Entities.Prova prova, AlunoTurmaDto alunoProva)
         {
             var situacoesReabrirProvaTai = ObterSituacoesReabrirProvaTai();
-            return prova.FormatoTai && alunoProva.InicioProva is not null && alunoProva.SituacaoProvaAluno is not null && situacoesReabrirProvaTai.Contains(alunoProva.SituacaoProvaAluno.Value);
+            return prova.FormatoTai && alunoProva.InicioProva is not null && (alunoProva.SituacaoProvaAluno is null || situacoesReabrirProvaTai.Contains(alunoProva.SituacaoProvaAluno.Value));
         }
     }
 }
