@@ -5,7 +5,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
 {
     public class Prova : EntidadeBase
     {
-        public Prova(long id, long codigo, string descricao, Modalidade modalidade, int ano, DateTime inicio, DateTime fim)
+        public Prova(long id, long codigo, string descricao, Modalidade modalidade, int ano, DateTime inicio, DateTime fim, bool formatoTai)
         {
             Id = id.ToString();
             Codigo = codigo;
@@ -14,6 +14,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
             Ano = ano;
             Inicio = inicio;
             Fim = fim;
+            FormatoTai = formatoTai;
         }
 
         public long Codigo { get; set; }
@@ -22,5 +23,6 @@ namespace SME.SERAp.Prova.Acompanhamento.Dominio.Entities
         public int Ano { get; set; }
         public DateTime Inicio { get; set; }
         public DateTime Fim { get; set; }
+        public bool FormatoTai { get; set; }
     }
 }
