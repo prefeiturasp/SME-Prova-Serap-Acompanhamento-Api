@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SME.SERAp.Prova.Acompanhamento.Aplicacao.UseCases;
+using SME.SERAp.Prova.Acompanhamento.Dominio.Entities;
 using SME.SERAp.Prova.Acompanhamento.Infra;
 using SME.SERAp.Prova.Acompanhamento.Infra.Dtos;
 using System.Threading.Tasks;
@@ -16,7 +17,21 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             var uesId = await mediator.Send(new ObterUesUsuarioLogadoQuery());
             var turmasId = await mediator.Send(new ObterTurmasUsuarioLogadoQuery());
 
-            return await mediator.Send(new ObterResumoGeralProvaQuery(filtro, dresId, uesId, turmasId, filtro.NumeroPagina, filtro.NumeroRegistros));
+         
+
+            var resumoGeralDto =  await mediator.Send(new ObterResumoGeralProvaQuery(filtro, dresId, uesId, turmasId, filtro.NumeroPagina, filtro.NumeroRegistros));
+
+
+            foreach (var item in resumoGeralDto.Items)
+            {
+               var prova = await mediator.Send(new ObterProvaPorIdQuery(item.ProvaId));
+                if (prova != null)
+                    item.FormatoTai = prova.FormatoTai;
+            }
+
+            return resumoGeralDto;
+
+
         }
     }
 }
