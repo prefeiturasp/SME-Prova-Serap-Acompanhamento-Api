@@ -18,6 +18,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Infra
         public long ProvasFinalizadas { get; set; }
         public long TotalTempoMedio { get; set; }
         public long TempoMedio { get; set; }
+        public bool FormatoTai { get; set; }
         public decimal PercentualRealizado
         {
             get
