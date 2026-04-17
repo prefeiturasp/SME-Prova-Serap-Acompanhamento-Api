@@ -13,7 +13,7 @@ namespace SME.SERAp.Prova.Acompanhamento.Aplicacao
             UesId = uesId;
             TurmasId = turmasId;
             NumeroPagina = numeroPagina > 0 ? numeroPagina : 1;
-            NumeroRegistros = numeroRegistros > 0 ? numeroRegistros : 10;
+            NumeroRegistros = numeroRegistros > 0 ? numeroRegistros : 30;
         }
 
         public FiltroDto Filtro { get; set; }
